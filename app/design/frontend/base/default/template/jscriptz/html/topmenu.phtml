@@ -1,0 +1,180 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * Top menu for store
+ *
+ * @see JScriptz_MegaMenu2_Block_Html_Topmenu extends Mage_Page_Block_Html_Topmenu
+ */
+?>
+<?php $z=0;$_menu = $this->getHtml('level-top') ?>
+<?php $_menuItem = $this->getMenuItem() ?>
+<script>
+$.noConflict();
+jQuery( document ).ready(function( $ ) {
+   jQuery('#mgmenu1').universalMegaMenu({
+        menu_effect: 'hover_fade',
+        menu_speed_show: 300,
+        menu_speed_hide: 200,
+        menu_speed_delay: 200,
+        menu_click_outside: false,
+        menubar_trigger : false,
+        menubar_hide : false,
+        menu_responsive: true
+    });
+    megaMenuContactForm(); 
+});
+</script>
+
+<div class="mgmenu_container" id="mgmenu1"><!-- Begin Mega Menu Container -->
+ 
+        <ul class="mgmenu"><!-- Begin Mega Menu -->
+            	
+	
+          
+          <!-- Begin MegaMenu Items -->
+          
+          <?php if(!empty($_menuItem)): ?>
+          <?php foreach($_menuItem as $sort){
+          $sortArray[] = $sort;
+          }
+          usort ($sortArray, function($a, $b) {return strcmp($a['position'], $b['position']);});
+          ?>
+          
+          <?php foreach($sortArray as $item): ?>
+          
+	          <?php if($item['linktitle'] != 'ROOT' && $item['level'] == 1): ?>
+	          <?php if($item['linktitle'] == 'Products'): ?>
+	           <li style=""><span><i class="mini_icon ic_grid"></i>Products</span><!-- Begin Products Item -->
+                        
+                <div class="dropdown_2columns dropdown_container" style="display: none;"><!-- Begin Products Item Container -->
+                		
+                    <ul class="dropdown_flyout">
+
+                    <?php if($_menu): ?>
+                    <li class="mgmenu_button" style="display: none;"><?php echo $item["linktitle"]; ?></li><!-- Button (Mobile Devices) -->
+                       <?php echo $_menu; ?>
+                    <?php endif ?>
+                    </ul>                       
+                
+                </div><!-- End Products Item Container -->
+
+          </li><!-- End Products Item -->
+	          
+	          <?php else: ?>
+		          <li class="mgmenu_button" style="display: none;"><?php echo $item["linktitle"]; ?></li><!-- Button (Mobile Devices) -->
+
+		          <!-- Begin Dropdown Link -->
+		          <li>
+		          
+		          <?php if(!empty($item["linkpath"])):?>
+		          
+		          	<?php echo "<a href='".$item["linkpath"]."'"; 
+		          	
+		          	if(!empty($item["linktarget"])){
+		          	echo "target='_".$item['linktarget']."'>".$item["linktitle"]."</a>";
+		          	}
+		          	else{
+		          	echo ">".$item["linktitle"]."</a>";
+		          	}
+		          	?>
+		          
+		          <?php else: ?>
+		          
+			  	<span><?php echo $item["linktitle"]; ?></span>
+		          
+		          <?php endif; ?>
+		          
+
+		          
+		          <?php if(!empty($item["menuhtml"])): ?>
+		          
+		          	<?php echo $item["menuhtml"]; ?>
+		          	
+		          <?php endif; ?>
+
+		          </li>
+		          <!-- End Dropdown Link -->
+
+		  <?php endif; ?>
+	          <?php endif; ?>
+	          
+          <?php endforeach; ?>
+          <?php endif ?>
+
+            <li class="right_item" style=""><span><i class="mini_icon ic_chat"></i>Contact</span><!-- Begin Item -->
+            
+            
+                <div class="dropdown_container dropdown_4columns dropdown_right" style="display: none;"><!-- Begin Item Container -->
+
+
+                    <div class="col_12">
+
+                        <h4 class="contact">Contact us</h4>
+                        <p></p>
+
+                        <div id="contact_form" class="contact_form"><!-- Begin Contact Form -->
+
+                            <form action="/contacts/index/post" id="mgmenu_form" method="POST">
+
+                                <label for="name">Name<span class="required"> *</span></label><br>
+                                <input type="text" id="name" name="name" class="form_element">
+
+                                <label for="email">Email<span class="required"> *</span></label><br>
+                                <input type="text" id="email" name="email" class="form_element">
+
+                                <label for="telephone">Telephone</label>
+                                <input name="telephone" id="telephone" title="<?php echo Mage::helper('contacts')->__('Telephone') ?>" value="" class="form_element" type="text" /> 
+                                  
+                                <label for="message">Message<span class="required"> *</span></label><br>
+                                <textarea id="comment" class="form_element" name="comment"></textarea>
+
+				<input type="text" id="hideit" name="hideit" value="" style="display:none !important">
+                                <div class="form_buttons">
+                                    <input type="submit" value="Submit" id="submit" class="button">
+                                    <input type="reset" value="Reset" id="reset" class="button">
+                                </div>
+
+                            </form>
+
+                        </div><!-- End Contact Form -->
+
+                    </div>
+
+
+                </div><!-- End Item Container -->
+
+            
+            </li><!-- End Item -->
+
+
+
+        </ul><!-- End Mega Menu -->
+
+
+
+    </div>

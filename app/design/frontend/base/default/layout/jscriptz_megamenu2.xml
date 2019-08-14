@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * JScriptz_MegaMenu2 extension
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the MIT License
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ * 
+ * @category   	JScriptz
+ * @package		JScriptz_MegaMenu2
+ * @copyright  	Copyright (c) 2013
+ * @license		http://opensource.org/licenses/mit-license.php MIT License
+ */
+-->
+<layout version="0.1.0">
+	<default translate="label" module="page">
+		<reference name="head">
+	    	<action method="addItem"><type>skin_js</type><name>js/JScriptz/mgmenu.js</name></action>
+	        <action method="addItem"><type>skin_css</type><name>css/JScriptz/mgmenu.css</name><params>media="screen"</params></action>	                
+	    </reference>
+		<reference name="catalog.topnav">
+	    	<action method="setTemplate"><template>jscriptz/html/topmenu.phtml</template></action>
+	    </reference>
+	 <reference name="top.menu">
+	    	<action method="setTemplate"><template>jscriptz/html/topmenu.phtml</template></action>
+	    </reference>
+	</default>
+</layout>

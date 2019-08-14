@@ -1,0 +1,110 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * JScriptz_MegaMenu2 extension
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the MIT License
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ * 
+ * @category   	JScriptz
+ * @package		JScriptz_MegaMenu2
+ * @copyright  	Copyright (c) 2013
+ * @license		http://opensource.org/licenses/mit-license.php MIT License
+ */
+-->
+<config>
+	<modules>
+		<JScriptz_MegaMenu2>
+			<version>1.8.0.0</version>
+		</JScriptz_MegaMenu2>
+	</modules>
+	<global>
+		<resources>
+			<jscriptz_megamenu2_setup>
+				<setup>
+					<module>JScriptz_MegaMenu2</module>
+					<class>JScriptz_MegaMenu2_Model_Resource_Setup</class>
+				</setup>
+			</jscriptz_megamenu2_setup>
+		</resources>
+		<blocks>
+			<megamenu2>
+				<class>JScriptz_MegaMenu2_Block</class>
+			</megamenu2>
+		<page>
+	        <rewrite>
+	            <html_topmenu>JScriptz_MegaMenu2_Block_Html_Topmenu</html_topmenu>
+	        </rewrite>
+   		 </page>
+		</blocks>
+		<helpers>
+			<megamenu2>
+				<class>JScriptz_MegaMenu2_Helper</class>
+			</megamenu2>
+		</helpers>
+		<models>
+			<megamenu2>
+				<class>JScriptz_MegaMenu2_Model</class>
+				<resourceModel>megamenu2_resource</resourceModel>
+			</megamenu2>
+			<megamenu2_resource>
+				<class>JScriptz_MegaMenu2_Model_Resource</class>
+				<entities>
+					<menuitem>
+						<table>megamenu2_menuitem</table>
+					</menuitem>
+					<menuitem_store>
+						<table>megamenu2_menuitem_store</table>
+					</menuitem_store>
+				</entities>
+			</megamenu2_resource>
+		</models>
+		
+	</global>
+	<frontend>
+			<layout>
+			<updates>
+				<jscriptz_megamenu2>
+					<file>jscriptz_megamenu2.xml</file>
+				</jscriptz_megamenu2>
+			</updates>
+		</layout>
+		</frontend>
+	<adminhtml>
+		<layout>
+			<updates>
+				<jscriptz_megamenu2>
+					<file>jscriptz_megamenu2.xml</file>
+				</jscriptz_megamenu2>
+			</updates>
+		</layout>
+		<translate>
+			<modules>
+				<JScriptz_MegaMenu2>
+					<files>
+						<default>JScriptz_MegaMenu2.csv</default>
+					</files>
+				</JScriptz_MegaMenu2>
+			</modules>
+		</translate>
+	</adminhtml>
+	<admin>
+		<routers>
+			<adminhtml>
+				<args>
+					<modules>
+						<JScriptz_MegaMenu2 before="Mage_Adminhtml">JScriptz_MegaMenu2_Adminhtml</JScriptz_MegaMenu2>
+					</modules>
+				</args>
+			</adminhtml>
+		</routers>
+	</admin>
+	<default>
+		<megamenu2>
+		</megamenu2>
+	</default>
+</config>

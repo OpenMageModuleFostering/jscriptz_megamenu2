@@ -1,0 +1,160 @@
+<?php
+/**
+ * JScriptz_MegaMenu2 extension
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the MIT License
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ * 
+ * @category   	JScriptz
+ * @package		JScriptz_MegaMenu2
+ * @copyright  	Copyright (c) 2013
+ * @license		http://opensource.org/licenses/mit-license.php MIT License
+ */
+?>
+<div class="content-header">
+	<h3 class="icon-head head-categories">
+		<?php echo $this->htmlEscape($this->getHeader()) . ($this->getMenuitemId() ? ' (' . Mage::helper('megamenu2')->__('ID: %s', $this->getMenuitemId()) . ')' : '') ?>
+	</h3>
+	<p class="content-buttons form-buttons">
+		<?php echo $this->getResetButtonHtml() ?>
+		<?php if($this->getMenuitemId()): ?>
+			<?php echo $this->getDeleteButtonHtml() ?>
+		<?php endif; ?>
+		<?php echo $this->getAdditionalButtonsHtml(); ?>
+		<?php echo $this->getSaveButtonHtml() ?>
+	</p>
+</div>
+<?php echo $this->getTabsHtml() ?>
+<iframe name="iframeSave" style="display:none; width:100%;" src="<?php echo $this->getJsUrl() ?>blank.html"></iframe>
+<form target="iframeSave" id="menuitem_edit_form" action="<?php echo $this->getSaveUrl() ?>" method="post" enctype="multipart/form-data">
+	<div class="no-display">
+		<input type="hidden" name="isIframe" value="1" />
+		<input name="form_key" type="hidden" value="<?php echo $this->getFormKey() ?>" />
+		<input type="hidden" name="active_tab_id" id="active_tab_id" value="" />
+	</div>
+	<div id="menuitem_tab_content"></div>
+</form>
+<script type="text/javascript">
+//<![CDATA[
+	menuitemForm = new varienForm('menuitem_edit_form');
+	menuitemForm.submit= function (url) {
+		this.errorSections = $H({});
+		this.canShowError = true;
+		this.submitUrl = url;
+		if (this.validator && this.validator.validate()) {
+			if(this.validationUrl){
+				this._validate();
+			}
+			else{
+				if (this.isSubmitted) {
+					return false;
+				}
+				this.isSubmitted = true;
+				this._submit();
+			}
+			displayLoadingMask();
+			return true;
+		}
+		return false;
+	};
+	menuitemForm.refreshPath = function () {
+		menuitemId = this.getMenuitemId();
+		if (!menuitemId) {
+			return false;
+		}
+		var refreshPathSuccess = function(transport) {
+			if (transport.responseText.isJSON()) {
+				response = transport.responseText.evalJSON()
+				if (response.error) {
+					alert(response.message);
+				} 
+				else {
+					if (menuitemForm.getMenuitemId() == response['id']) {
+						menuitemForm.setMenuitemPath(response['path']);
+					}
+				}
+			}
+		};
+		new Ajax.Request(
+			'<?php echo $this->getRefreshPathUrl() ?>',
+			{
+				method: 'POST',
+				evalScripts: true,
+				onSuccess: refreshPathSuccess
+			}
+		);
+	};
+
+	menuitemForm.getMenuitemId = function () {
+		collection = $(this.formId).getInputs('hidden','menuitem[id]');
+		if (collection.size() > 0) {
+			return collection.first().value;
+		}
+		return false;
+	};
+	menuitemForm.setMenuitemPath = function (path) {
+		collection = $(this.formId).getInputs('hidden','menuitem[path]');
+		if (collection.size() > 0) {
+			return collection.first().value = path;
+		}
+	};
+	function menuitemSubmit(url, useAjax) {
+		var activeTab = $('active_tab_id');
+		if (activeTab) {
+			if (activeTab.tabsJsObject && activeTab.tabsJsObject.activeTab) {
+				activeTab.value = activeTab.tabsJsObject.activeTab.id;
+			}
+		}
+		var params = {};
+		var fields = $('menuitem_edit_form').getElementsBySelector('input', 'select');
+		for(var i=0;i<fields.length;i++){
+			if (!fields[i].name) {
+				continue;
+			}
+			params[fields[i].name] = fields[i].getValue();
+		}
+		var menuitemId = params['menuitem[id]'] ? params['menuitem[id]'] : 0;
+		var isCreating = menuitemId == 0;
+		var path = params['menuitem[path]'].split('/');
+		var parentId = path.pop();
+		if (parentId == menuitemId) {
+			parentId = path.pop();
+		}
+		if (isCreating) {
+			if (!tree.currentNodeId) {
+				tree.currentNodeId = parentId;
+			}
+			tree.addNodeTo = parentId;
+		} 
+		else {
+			var currentNode = tree.getNodeById(menuitemId);
+			var oldClass = 'active-category';
+			var newClass = 'active-category';
+			if (currentNode) {
+				if (parseInt(params['menuitem[status]'])) {
+					var oldClass = 'no-active-category';
+					var newClass = 'active-category';
+				} 
+				else {
+					var oldClass = 'active-category';
+					var newClass = 'no-active-category';
+				}
+				Element.removeClassName(currentNode.ui.wrap.firstChild, oldClass);
+				Element.addClassName(currentNode.ui.wrap.firstChild, newClass);
+			}
+		}
+		menuitemForm.submit();
+	}
+	<?php if($this->isAjax() && ($block = $this->getLayout()->getBlock('tabs')) && ($_tabsJsObject=$block->getJsObjectName())): ?>
+		<?php echo $_tabsJsObject ?>.moveTabContentInDest();
+		if (<?php echo $_tabsJsObject ?>.activeTab) {
+			$('active_tab_id').value = <?php echo $_tabsJsObject ?>.activeTab.id;
+		}
+		$('active_tab_id').tabsJsObject = <?php echo $_tabsJsObject ?>;
+	<?php endif; ?>
+//]]>
+</script>

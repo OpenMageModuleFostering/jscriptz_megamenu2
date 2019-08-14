@@ -1,0 +1,16 @@
+{
+    "name": "OpenMageModuleFostering/JScriptz_MegaMenu2",
+    "type": "magento-module",
+    "license": "Open-Software-License",
+    "homepage": "",
+    "description": "This is a mega nav extension that allows you to control your top menu links and the content below them through the admin interface. ",
+    "authors": [
+    {
+        "name": "Jason Lotzer",
+        "email": "jasonlotzer@gmail.com"
+    }
+],
+    "suggest": {
+        "magento-hackathon/magento-composer-installer": "*"
+    }
+}

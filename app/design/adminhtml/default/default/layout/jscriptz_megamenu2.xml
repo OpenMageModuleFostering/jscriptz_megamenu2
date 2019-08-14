@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * JScriptz_MegaMenu2 extension
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the MIT License
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ * 
+ * @category   	JScriptz
+ * @package		JScriptz_MegaMenu2
+ * @copyright  	Copyright (c) 2013
+ * @license		http://opensource.org/licenses/mit-license.php MIT License
+ */
+--> 
+<layout>
+	<adminhtml_megamenu2_menuitem_edit>
+		<update handle="editor"/>
+		<reference name="left">
+			<block name="menuitem.tree" type="megamenu2/adminhtml_menuitem_tree" />
+		</reference>
+		<reference name="content">
+			<block name="menuitem.edit" type="megamenu2/adminhtml_menuitem_edit" template="jscriptz_megamenu2/menuitem/edit.phtml" />
+		</reference>
+		<reference name="js">
+			<block type="core/template" template="catalog/wysiwyg/js.phtml" name="catalog.wysiwyg.js" />
+		</reference>
+	</adminhtml_megamenu2_menuitem_edit>
+</layout>

@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * JScriptz_MegaMenu2 extension
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the MIT License
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ * 
+ * @category   	JScriptz
+ * @package		JScriptz_MegaMenu2
+ * @copyright  	Copyright (c) 2013
+ * @license		http://opensource.org/licenses/mit-license.php MIT License
+ */
+-->
+<config>
+	<acl>
+		<resources>
+			<admin>
+				<children>
+					<system>
+						<children>
+							<config>
+								<children>
+									<megamenu2 translate="title" module="megamenu2">
+										<title>MegaMenu2</title>
+									</megamenu2>
+								</children>
+							</config>
+						</children>
+					</system>
+					<megamenu2 translate="title" module="megamenu2">
+						<title>MegaMenu2</title>
+						<children>
+							<menuitem translate="title" module="megamenu2">
+								<title>Menu Items</title>
+							</menuitem>
+						</children>
+					</megamenu2>
+				</children>
+			</admin>
+		</resources>
+	</acl>
+	<menu>
+		<megamenu2 translate="title" module="megamenu2">
+			<title>MegaMenu2</title>
+			<sort_order>81</sort_order>
+			<depends>
+				<module>JScriptz_MegaMenu2</module>
+		 	</depends>
+		 	<children>
+				<menuitem translate="title" module="megamenu2">
+					<title>Menu Items</title>
+					<action>adminhtml/MegaMenu2_menuitem</action>
+					<sort_order>0</sort_order>
+				</menuitem>
+			</children>
+		</megamenu2>
+	</menu>
+</config>
