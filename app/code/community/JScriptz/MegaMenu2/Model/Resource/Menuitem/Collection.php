@@ -10,15 +10,16 @@
  * http://opensource.org/licenses/mit-license.php
  * 
  * @category   	JScriptz
- * @package	JScriptz_MegaMenu2
+ * @package		JScriptz_MegaMenu2
  * @copyright  	Copyright (c) 2013
- * @license	http://opensource.org/licenses/mit-license.php MIT License
+ * @license		http://opensource.org/licenses/mit-license.php MIT License
  */
 /**
  * Menu Item collection resource model
  *
  * @category	JScriptz
- * @package	JScriptz_MegaMenu2
+ * @package		JScriptz_MegaMenu2
+ * @author Jason Lotzer
  */
 class JScriptz_MegaMenu2_Model_Resource_Menuitem_Collection extends Mage_Core_Model_Resource_Db_Collection_Abstract{
 	protected $_joinedFields = array();
@@ -26,6 +27,7 @@ class JScriptz_MegaMenu2_Model_Resource_Menuitem_Collection extends Mage_Core_Mo
 	 * constructor
 	 * @access public
 	 * @return void
+	 * @author Jason Lotzer
 	 */
 	public function _construct(){
 		parent::_construct();
@@ -39,6 +41,7 @@ class JScriptz_MegaMenu2_Model_Resource_Menuitem_Collection extends Mage_Core_Mo
 	 * @param string $labelField
 	 * @param array $additional
 	 * @return array
+	 * @author Jason Lotzer
 	 */
 	protected function _toOptionArray($valueField='entity_id', $labelField='linktitle', $additional=array()){
 		return parent::_toOptionArray($valueField, $labelField, $additional);
@@ -49,6 +52,7 @@ class JScriptz_MegaMenu2_Model_Resource_Menuitem_Collection extends Mage_Core_Mo
 	 * @param string $valueField
 	 * @param string $labelField
 	 * @return array
+	 * @author Jason Lotzer
 	 */
 	protected function _toOptionHash($valueField='entity_id', $labelField='linktitle'){
 		return parent::_toOptionHash($valueField, $labelField);
@@ -59,6 +63,7 @@ class JScriptz_MegaMenu2_Model_Resource_Menuitem_Collection extends Mage_Core_Mo
 	 * @param int|Mage_Core_Model_Store $store
 	 * @param bool $withAdmin
 	 * @return JScriptz_MegaMenu2_Model_Resource_Menuitem_Collection
+	 * @author Jason Lotzer
 	 */
 	public function addStoreFilter($store, $withAdmin = true){
 		if (!isset($this->_joinedFields['store'])){
@@ -80,6 +85,7 @@ class JScriptz_MegaMenu2_Model_Resource_Menuitem_Collection extends Mage_Core_Mo
 	 * Join store relation table if there is store filter
 	 * @access protected
 	 * @return JScriptz_MegaMenu2_Model_Resource_Menuitem_Collection
+	 * @author Jason Lotzer
 	 */
 	protected function _renderFiltersBefore(){
 		if ($this->getFilter('store')) {
@@ -100,6 +106,7 @@ class JScriptz_MegaMenu2_Model_Resource_Menuitem_Collection extends Mage_Core_Mo
 	 * Extra GROUP BY strip added.
 	 * @access public
 	 * @return Varien_Db_Select
+	 * @author Jason Lotzer
 	 */
 	public function getSelectCountSql(){
 		$countSelect = parent::getSelectCountSql();
@@ -111,6 +118,7 @@ class JScriptz_MegaMenu2_Model_Resource_Menuitem_Collection extends Mage_Core_Mo
 	 * @access public
 	 * @param array $menuitemIds
 	 * @return JScriptz_MegaMenu2_Model_Resource_Menuitem_Collection
+	 * @author Jason Lotzer
 	 */
 	public function addIdFilter($menuitemIds){
 		if (is_array($menuitemIds)) {
@@ -141,6 +149,7 @@ class JScriptz_MegaMenu2_Model_Resource_Menuitem_Collection extends Mage_Core_Mo
 	 * @access public
 	 * @param string $regexp
 	 * @return JScriptz_MegaMenu2_Model_Resource_Menuitem_Collection
+	 * @author Jason Lotzer
 	 */
 	public function addPathFilter($regexp){
 		$this->addFieldToFilter('path', array('regexp' => $regexp));
@@ -152,6 +161,7 @@ class JScriptz_MegaMenu2_Model_Resource_Menuitem_Collection extends Mage_Core_Mo
 	 * @access public
 	 * @param array|string $paths
 	 * @return JScriptz_MegaMenu2_Model_Resource_Menuitem_Collection
+	 * @author Jason Lotzer
 	 */
 	public function addPathsFilter($paths){
 		if (!is_array($paths)) {
@@ -172,6 +182,7 @@ class JScriptz_MegaMenu2_Model_Resource_Menuitem_Collection extends Mage_Core_Mo
 	 * @access public
 	 * @param int|string $level
 	 * @return JScriptz_MegaMenu2_Model_Resource_Menuitem_Collection
+	 * @author Jason Lotzer
 	 */
 	public function addLevelFilter($level){
 		$this->addFieldToFilter('level', array('lteq' => $level));
@@ -180,7 +191,8 @@ class JScriptz_MegaMenu2_Model_Resource_Menuitem_Collection extends Mage_Core_Mo
 	/**
 	 * Add root menu item filter
 	 * @access public
-	 * @return JScriptz_MegaMenu2_Model_Resource_Menuitem_Collection	 */
+	 * @return JScriptz_MegaMenu2_Model_Resource_Menuitem_Collection
+	 */
 	public function addRootLevelFilter(){
 		$this->addFieldToFilter('path', array('neq' => '1'));
 		$this->addLevelFilter(1);
@@ -190,7 +202,8 @@ class JScriptz_MegaMenu2_Model_Resource_Menuitem_Collection extends Mage_Core_Mo
 	 * Add order field
 	 * @access public
 	 * @param string $field
-	 * @return JScriptz_MegaMenu2_Model_Resource_Menuitem_Collection	 */
+	 * @return JScriptz_MegaMenu2_Model_Resource_Menuitem_Collection
+	 */
 	public function addOrderField($field){
 		$this->setOrder($field, self::SORT_ORDER_ASC);
 		return $this;
@@ -198,9 +211,54 @@ class JScriptz_MegaMenu2_Model_Resource_Menuitem_Collection extends Mage_Core_Mo
 	/**
 	 * Add active menu item filter
 	 * @access public
-	 * @return JScriptz_MegaMenu2_Model_Resource_Menuitem_Collection	 */
+	 * @return JScriptz_MegaMenu2_Model_Resource_Menuitem_Collection
+	 */
 	public function addStatusFilter(){
 		$this->addFieldToFilter('status', 1);
+		return $this;
+	}
+	/**
+	 * add the product filter to collection
+	 * @access public
+	 * @param mixed (Mage_Catalog_Model_Product|int) $product
+	 * @return JScriptz_MegaMenu2_Model_Resource_Menuitem_Collection
+	 * @author Jason Lotzer
+	 */
+	public function addProductFilter($product){
+		if ($product instanceof Mage_Catalog_Model_Product){
+			$product = $product->getId();
+		}
+		if (!isset($this->_joinedFields['product'])){
+			$this->getSelect()->join(
+				array('related_product' => $this->getTable('megamenu2/menuitem_product')),
+				'related_product.menuitem_id = main_table.entity_id',
+				array('position')
+			);
+			$this->getSelect()->where('related_product.product_id = ?', $product);
+			$this->_joinedFields['product'] = true;
+		}
+		return $this;
+	}
+	/**
+	 * add the menusetting filter to collection
+	 * @access public
+	 * @param mixed (JScriptz_MegaMenu2_Model_Menusetting|int) $menusetting
+	 * @return JScriptz_MegaMenu2_Model_Resource_Menuitem_Collection
+	 * @author Jason Lotzer
+	 */
+	public function addMenusettingFilter($menusetting){
+		if ($menusetting instanceof JScriptz_MegaMenu2_Model_Menusetting){
+			$menusetting = $menusetting->getId();
+		}
+		if (!isset($this->_joinedFields['menusetting'])){
+			$this->getSelect()->join(
+				array('related_menusetting' => $this->getTable('megamenu2/menuitem_menusetting')),
+				'related_menusetting.menuitem_id = main_table.entity_id',
+				array('position')
+			);
+			$this->getSelect()->where('related_menusetting.menusetting_id = ?', $menusetting);
+			$this->_joinedFields['menusetting'] = true;
+		}
 		return $this;
 	}
 }

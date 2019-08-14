@@ -10,22 +10,23 @@
  * http://opensource.org/licenses/mit-license.php
  * 
  * @category   	JScriptz
- * @package	JScriptz_MegaMenu2
+ * @package		JScriptz_MegaMenu2
  * @copyright  	Copyright (c) 2013
- * @license	http://opensource.org/licenses/mit-license.php MIT License
+ * @license		http://opensource.org/licenses/mit-license.php MIT License
  */
 /**
  * Menu Item admin edit tabs
  *
  * @category	JScriptz
- * @package	JScriptz_MegaMenu2
-
+ * @package		JScriptz_MegaMenu2
+ * @author Jason Lotzer
  */
 class JScriptz_MegaMenu2_Block_Adminhtml_Menuitem_Edit_Tabs extends Mage_Adminhtml_Block_Widget_Tabs{
 	/**
 	 * Initialize Tabs
 	 * @access public
 	 * @return void
+	 * @author Jason Lotzer
  	*/
 	public function __construct(){
 		parent::__construct();
@@ -38,7 +39,7 @@ class JScriptz_MegaMenu2_Block_Adminhtml_Menuitem_Edit_Tabs extends Mage_Adminht
 	 * Retrieve menu item entity
 	 * @access public
 	 * @return JScriptz_MegaMenu2_Model_Menuitem
-	
+	 * @author Jason Lotzer
 	 */
 	public function getMenuitem(){
 		return Mage::registry('current_menuitem');
@@ -61,6 +62,14 @@ class JScriptz_MegaMenu2_Block_Adminhtml_Menuitem_Edit_Tabs extends Mage_Adminht
 				'content' 	=> $this->getLayout()->createBlock('megamenu2/adminhtml_menuitem_edit_tab_stores')->toHtml(),
 			));
 		}
+		$this->addTab('menusettings', array(
+			'label' => Mage::helper('megamenu2')->__('Menu Settings'),
+			'content'   => $this->getLayout()->createBlock('megamenu2/adminhtml_menuitem_edit_tab_menusetting','menuitem.menusetting.grid')->toHtml(),
+		));
+		$this->addTab('products', array(
+			'label' => Mage::helper('megamenu2')->__('Associated Products'),
+			'content'   => $this->getLayout()->createBlock('megamenu2/adminhtml_menuitem_edit_tab_product','menuitem.product.grid')->toHtml(),
+		));
 		return parent::_prepareLayout();
 	}
 }

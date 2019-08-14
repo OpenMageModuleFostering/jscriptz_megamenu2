@@ -1,0 +1,130 @@
+<?php
+/**
+ * JScriptz_MegaMenu2 extension
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the MIT License
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ * 
+ * @category   	JScriptz
+ * @package		JScriptz_MegaMenu2
+ * @copyright  	Copyright (c) 2013
+ * @license		http://opensource.org/licenses/mit-license.php MIT License
+ */
+?>
+<div class="entry-edit">
+	<div class="entry-edit-head">
+		<h4 class="icon-head head-edit-form fieldset-legend">
+			<?php echo Mage::helper('megamenu2')->__('Menu Items') ?>
+		</h4>
+	</div>
+	<fieldset id="grop_fields">
+		<input type="hidden" name="menuitem_ids" id="menusetting_menuitems" value="<?php echo $this->getIdsString() ?>">
+		<div id="menusetting-menuitems" class="tree"></div>
+	</fieldset>
+</div>
+<?php if($this->getRootNode() && $this->getRootNode()->hasChildren()): ?>
+<script type="text/javascript">
+	Ext.EventManager.onDocumentReady(function() {
+		var menuitemLoader = new Ext.tree.TreeLoader({
+		   dataUrl: '<?php echo $this->getLoadTreeUrl()?>'
+		});
+		menuitemLoader.createNode = function(config) {
+			config.uiProvider = Ext.tree.CheckboxNodeUI;
+			var node;
+			if (config.children && !config.children.length) {
+				delete(config.children);
+				node = new Ext.tree.AsyncTreeNode(config);
+			} 
+			else {
+				node = new Ext.tree.TreeNode(config);
+			}
+			return node;
+		};
+		menuitemLoader.on("beforeload", function(treeLoader, node) {
+			treeLoader.baseParams.menuitem = node.attributes.id;
+		});
+	
+		menuitemLoader.on("load", function(treeLoader, node, config) {
+			varienWindowOnload();
+		});
+		var tree = new Ext.tree.TreePanel('menusetting-menuitems', {
+			animate:true,
+			loader: menuitemLoader,
+			enableDD:false,
+			containerScroll: true,
+			rootUIProvider: Ext.tree.CheckboxNodeUI,
+			selModel: new Ext.tree.CheckNodeMultiSelectionModel(),
+			rootVisible: '<?php echo $this->getRootNode()->getIsVisible() ?>'
+		});
+		tree.on('check', function(node) {
+			if(node.attributes.checked) {
+				menuitemAdd(node.id);
+			} else {
+				menuitemRemove(node.id);
+			}
+			varienElementMethods.setHasChanges(node.getUI().checkbox);
+		}, tree);
+		var root = new Ext.tree.TreeNode({
+			text: '<?php echo $this->jsQuoteEscape($this->getRootNode()->getLinktitle()) ?>',
+			draggable:false,
+			checked:'<?php echo $this->getRootNode()->getChecked() ?>',
+			id:'<?php echo $this->getRootNode()->getId() ?>',
+			disabled: <?php echo ($this->getRootNode()->getDisabled() ? 'true' : 'false') ?>,
+			uiProvider: Ext.tree.CheckboxNodeUI
+		});
+		tree.setRootNode(root);
+		bildMenuitemTree(root, <?php echo $this->getTreeJson() ?>);
+		tree.addListener('click', menuitemClick.createDelegate(this));
+		tree.render();
+		root.expand();
+	});
+	function bildMenuitemTree(parent, config){
+		if (!config) {
+			return null;
+		}
+		if (parent && config && config.length){
+			for (var i = 0; i < config.length; i++){
+				config[i].uiProvider = Ext.tree.CheckboxNodeUI;
+				var node;
+				var _node = Object.clone(config[i]);
+				if (_node.children && !_node.children.length) {
+					delete(_node.children);
+					node = new Ext.tree.AsyncTreeNode(_node);
+
+				} 
+				else {
+					node = new Ext.tree.TreeNode(config[i]);
+				}
+				parent.appendChild(node);
+				node.loader = node.getOwnerTree().loader;
+				if(config[i].children){
+					bildMenuitemTree(node, config[i].children);
+				}
+			}
+		}
+	}
+	function menuitemClick(node, e){
+		if (node.disabled) {
+			return;
+		}
+		node.getUI().check(!node.getUI().checked());
+		varienElementMethods.setHasChanges(Event.element(e), e);
+	};
+	function menuitemAdd(id) {
+		var ids = $('menusetting_menuitems').value.split(',');
+		ids.push(id);
+		$('menusetting_menuitems').value = ids.join(',');
+	}
+	function menuitemRemove(id) {
+		var ids = $('menusetting_menuitems').value.split(',');
+		while (-1 != ids.indexOf(id)) {
+			ids.splice(ids.indexOf(id), 1);
+		}
+		$('menusetting_menuitems').value = ids.join(',');
+	}
+</script>
+<?php endif; ?>

@@ -10,22 +10,23 @@
  * http://opensource.org/licenses/mit-license.php
  * 
  * @category   	JScriptz
- * @package	JScriptz_MegaMenu2
+ * @package		JScriptz_MegaMenu2
  * @copyright  	Copyright (c) 2013
- * @license	http://opensource.org/licenses/mit-license.php MIT License
+ * @license		http://opensource.org/licenses/mit-license.php MIT License
  */
 /**
  * Menu Item admin edit form
  *
  * @category	JScriptz
- * @package	JScriptz_MegaMenu2
-
+ * @package		JScriptz_MegaMenu2
+ * @author Jason Lotzer
  */
 class JScriptz_MegaMenu2_Block_Adminhtml_Menuitem_Edit extends Mage_Adminhtml_Block_Widget_Form_Container{
 	/**
 	 * constructor
 	 * @access public
 	 * @return void
+	 * @author Jason Lotzer
 	 */
 	public function __construct(){
 		$this->_objectId	= 'entity_id';

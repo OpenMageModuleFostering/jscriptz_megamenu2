@@ -10,15 +10,15 @@
  * http://opensource.org/licenses/mit-license.php
  * 
  * @category   	JScriptz
- * @package	JScriptz_MegaMenu2
+ * @package		JScriptz_MegaMenu2
  * @copyright  	Copyright (c) 2013
- * @license	http://opensource.org/licenses/mit-license.php MIT License
+ * @license		http://opensource.org/licenses/mit-license.php MIT License
  */
 /**
  * Menu Item tree resource model
  * @category	JScriptz
- * @package	JScriptz_MegaMenu2
-
+ * @package		JScriptz_MegaMenu2
+ * @author Jason Lotzer
  */
 class JScriptz_MegaMenu2_Model_Resource_Menuitem_Tree extends Varien_Data_Tree_Dbp{
 	const ID_FIELD		= 'entity_id';
@@ -27,16 +27,19 @@ class JScriptz_MegaMenu2_Model_Resource_Menuitem_Tree extends Varien_Data_Tree_D
 	const LEVEL_FIELD 	= 'level';
 	/**
 	 * Menu Items resource collection
-	 * @var JScriptz_MegaMenu2_Model_Resource_Menuitem_Collection	 */
+	 * @var JScriptz_MegaMenu2_Model_Resource_Menuitem_Collection
+	 */
 	protected $_collection;
 	/**
 	 * Inactive menu items ids
-	 * @var array	 */
+	 * @var array
+	 */
 	protected $_inactiveMenuitemIds  = null;
 	/**
 	 * Initialize tree
 	 * @access public
 	 * @return void
+	 * @author Jason Lotzer
 	 */
 	public function __construct(){
 		$resource = Mage::getSingleton('core/resource');
@@ -57,6 +60,7 @@ class JScriptz_MegaMenu2_Model_Resource_Menuitem_Tree extends Varien_Data_Tree_D
 	 * @access public
 	 * @param boolean $sorted
 	 * @return JScriptz_MegaMenu2_Model_Resource_Menuitem_Collection
+	 * @author Jason Lotzer
 	 */
 	public function getCollection($sorted = false){
 		if (is_null($this->_collection)) {
@@ -68,7 +72,8 @@ class JScriptz_MegaMenu2_Model_Resource_Menuitem_Tree extends Varien_Data_Tree_D
 	 * set the collection
 	 * @access public
 	 * @param JScriptz_MegaMenu2_Model_Resource_Menuitem_Collection $collection
-	 * @return JScriptz_MegaMenu2_Model_Resource_Menuitem_Tree	 */
+	 * @return JScriptz_MegaMenu2_Model_Resource_Menuitem_Tree
+	 */
 	public function setCollection($collection){
 		if (!is_null($this->_collection)) {
 			destruct($this->_collection);
@@ -80,7 +85,8 @@ class JScriptz_MegaMenu2_Model_Resource_Menuitem_Tree extends Varien_Data_Tree_D
 	 * get the default collection
 	 * @access protected
 	 * @param boolean $sorted
-	 * @return JScriptz_MegaMenu2_Model_Resource_Menuitem_Collection	 */
+	 * @return JScriptz_MegaMenu2_Model_Resource_Menuitem_Collection
+	 */
 	protected function _getDefaultCollection($sorted = false){
 		$collection = Mage::getModel('megamenu2/menuitem')->getCollection();
 		if ($sorted) {
@@ -99,6 +105,7 @@ class JScriptz_MegaMenu2_Model_Resource_Menuitem_Tree extends Varien_Data_Tree_D
 	 * @param unknown_type $menuitem
 	 * @param unknown_type $newParent
 	 * @param unknown_type $prevNode
+	 * @author Jason Lotzer
 	 */
 	public function move($menuitem, $newParent, $prevNode = null){
 		Mage::getResourceSingleton('megamenu2/menuitem')->move($menuitem->getId(), $newParent->getId());
@@ -112,7 +119,8 @@ class JScriptz_MegaMenu2_Model_Resource_Menuitem_Tree extends Varien_Data_Tree_D
 	 * @param unknown_type $menuitem
 	 * @param Varien_Data_Tree_Node $newParent
 	 * @param Varien_Data_Tree_Node $prevNode
-	 * @return JScriptz_MegaMenu2_Model_Resource_Menuitem_Tree	 */
+	 * @return JScriptz_MegaMenu2_Model_Resource_Menuitem_Tree
+	 */
 	protected function _afterMove($menuitem, $newParent, $prevNode){
 		Mage::app()->cleanCache(array(JScriptz_MegaMenu2_Model_Menuitem::CACHE_TAG));
 		return $this;
@@ -123,6 +131,7 @@ class JScriptz_MegaMenu2_Model_Resource_Menuitem_Tree extends Varien_Data_Tree_D
 	 * @param array $ids
 	 * @param bool $addCollectionData
 	 * @return JScriptz_MegaMenu2_Model_Resource_Menuitem_Tree
+	 * @author Jason Lotzer
 	 */
 	public function loadByIds($ids, $addCollectionData = true){
 		$levelField = $this->_conn->quoteIdentifier('level');
@@ -191,6 +200,7 @@ class JScriptz_MegaMenu2_Model_Resource_Menuitem_Tree extends Varien_Data_Tree_D
 	 * @param bool $addCollectionData
 	 * @param bool $withRootNode
 	 * @return array
+	 * @author Jason Lotzer
 	 */
 	public function loadBreadcrumbsArray($path, $addCollectionData = true, $withRootNode = false){
 		$pathIds = explode('/', $path);
@@ -220,6 +230,7 @@ class JScriptz_MegaMenu2_Model_Resource_Menuitem_Tree extends Varien_Data_Tree_D
 	 * @param bool $sorted
 	 * @param array $optionalAttributes
 	 * @return Zend_Db_Select
+	 * @author Jason Lotzer
 	 */
 	protected function _createCollectionDataSelect($sorted = true){
 		$select = $this->_getDefaultCollection($sorted ? $this->_orderField : false)->getSelect();
@@ -236,6 +247,7 @@ class JScriptz_MegaMenu2_Model_Resource_Menuitem_Tree extends Varien_Data_Tree_D
 	 * @access public
 	 * @param array $ids
 	 * @return array
+	 * @author Jason Lotzer
 	 */
 	public function getExistingMenuitemIdsBySpecifiedIds($ids){
 		if (empty($ids)) {
@@ -258,6 +270,7 @@ class JScriptz_MegaMenu2_Model_Resource_Menuitem_Tree extends Varien_Data_Tree_D
 	 * @param boolean $toLoad
 	 * @param boolean $onlyActive
 	 * @return JScriptz_MegaMenu2_Model_Resource_Category_Tree
+	 * @author Jason Lotzer
 	 */
 	public function addCollectionData($collection = null, $sorted = false, $exclude = array(), $toLoad = true, $onlyActive = false){
 		if (is_null($collection)) {
@@ -302,6 +315,7 @@ class JScriptz_MegaMenu2_Model_Resource_Menuitem_Tree extends Varien_Data_Tree_D
 	 * @access public
 	 * @param unknown_type $ids
 	 * @return JScriptz_MegaMenu2_Model_Resource_Menuitem_Tree
+	 * @author Jason Lotzer
 	 */
 	public function addInactiveMenuitemIds($ids){
 		if (!is_array($this->_inactiveMenuitemIds)) {
@@ -314,6 +328,7 @@ class JScriptz_MegaMenu2_Model_Resource_Menuitem_Tree extends Varien_Data_Tree_D
 	 * Retrieve inactive menu items ids
 	 * @access protected
 	 * @return JScriptz_MegaMenu2_Model_Resource_Menuitem_Tree
+	 * @author Jason Lotzer
 	 */
 	protected function _initInactiveMenuitemIds(){
 		$this->_inactiveMenuitemIds = array();
@@ -323,6 +338,7 @@ class JScriptz_MegaMenu2_Model_Resource_Menuitem_Tree extends Varien_Data_Tree_D
 	 * Retrieve inactive menu items ids
 	 * @access public
 	 * @return array
+	 * @author Jason Lotzer
 	 */
 	public function getInactiveMenuitemIds(){
 		if (!is_array($this->_inactiveMenuitemIds)) {
@@ -335,6 +351,7 @@ class JScriptz_MegaMenu2_Model_Resource_Menuitem_Tree extends Varien_Data_Tree_D
 	 * @access protected
 	 * @param JScriptz_MegaMenu2_Model_Resource_Menuitem_Collection $collection
 	 * @return array
+	 * @author Jason Lotzer
 	 */
 	protected function _getDisabledIds($collection){
 		$this->_inactiveItems = $this->getInactiveMenuitemIds();
@@ -361,6 +378,7 @@ class JScriptz_MegaMenu2_Model_Resource_Menuitem_Tree extends Varien_Data_Tree_D
 	 * @access protecte
 	 * @param JScriptz_MegaMenu2_Model_Resource_Menuitem_Collection $collection
 	 * @return array
+	 * @author Jason Lotzer
 	 */
 	protected function _getInactiveItemIds($collection){
 		$filter = $collection->getAllIdsSql();
@@ -379,6 +397,7 @@ class JScriptz_MegaMenu2_Model_Resource_Menuitem_Tree extends Varien_Data_Tree_D
 	 * @access protecte
 	 * @param int $id
 	 * @return boolean
+	 * @author Jason Lotzer
 	 */
 	protected function _getItemIsActive($id){
 		if (!in_array($id, $this->_inactiveItems)) {

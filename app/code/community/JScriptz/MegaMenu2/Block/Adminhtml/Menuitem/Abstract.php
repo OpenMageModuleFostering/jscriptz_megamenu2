@@ -10,22 +10,23 @@
  * http://opensource.org/licenses/mit-license.php
  * 
  * @category   	JScriptz
- * @package	JScriptz_MegaMenu2
+ * @package		JScriptz_MegaMenu2
  * @copyright  	Copyright (c) 2013
- * @license	http://opensource.org/licenses/mit-license.php MIT License
+ * @license		http://opensource.org/licenses/mit-license.php MIT License
  */
 /**
  * Menu Item admin block abstract
  *
  * @category	JScriptz
- * @package	JScriptz_MegaMenu2
-
+ * @package		JScriptz_MegaMenu2
+ * @author Jason Lotzer
  */
 class JScriptz_MegaMenu2_Block_Adminhtml_Menuitem_Abstract extends Mage_Adminhtml_Block_Template{
 	/**
 	 * get current menu item
 	 * @access public
 	 * @return JScriptz_MegaMenu2_Model_Entity
+	 * @author Jason Lotzer
 	 */
 	public function getMenuitem(){
 		return Mage::registry('menuitem');
@@ -34,6 +35,7 @@ class JScriptz_MegaMenu2_Block_Adminhtml_Menuitem_Abstract extends Mage_Adminhtm
 	 * get current menu item id
 	 * @access public
 	 * @return int
+	 * @author Jason Lotzer
 	 */
 	public function getMenuitemId(){
 		if ($this->getMenuitem()) {
@@ -45,6 +47,7 @@ class JScriptz_MegaMenu2_Block_Adminhtml_Menuitem_Abstract extends Mage_Adminhtm
 	 * get current menu item Link Title
 	 * @access public
 	 * @return string
+	 * @author Jason Lotzer
 	 */
 	public function getMenuitemLinktitle(){
 		return $this->getMenuitem()->getLinktitle();
@@ -53,6 +56,7 @@ class JScriptz_MegaMenu2_Block_Adminhtml_Menuitem_Abstract extends Mage_Adminhtm
 	 * get current menu item path
 	 * @access public
 	 * @return string
+	 * @author Jason Lotzer
 	 */
 	public function getMenuitemPath(){
 		if ($this->getMenuitem()) {
@@ -64,6 +68,7 @@ class JScriptz_MegaMenu2_Block_Adminhtml_Menuitem_Abstract extends Mage_Adminhtm
 	 * check if there is a root menu item
 	 * @access public
 	 * @return bool
+	 * @author Jason Lotzer
 	 */
 	public function hasRootMenuitem(){
 		$root = $this->getRoot();
@@ -78,6 +83,7 @@ class JScriptz_MegaMenu2_Block_Adminhtml_Menuitem_Abstract extends Mage_Adminhtm
 	 * @param JScriptz_MegaMenu2_Model_Menuitem|null $parentNodeMenuitem
 	 * @param int $recursionLevel
 	 * @return Varien_Data_Tree_Node
+	 * @author Jason Lotzer
 	 */
 	public function getRoot($parentNodeMenuitem = null, $recursionLevel = 3){
 		if (!is_null($parentNodeMenuitem) && $parentNodeMenuitem->getId()) {
@@ -109,6 +115,7 @@ class JScriptz_MegaMenu2_Block_Adminhtml_Menuitem_Abstract extends Mage_Adminhtm
 	 * @accsess public
 	 * @param array $ids
 	 * @return Varien_Data_Tree_Node
+	 * @author Jason Lotzer
 	 */
 	public function getRootByIds($ids){
 		$root = Mage::registry('root');
@@ -135,6 +142,7 @@ class JScriptz_MegaMenu2_Block_Adminhtml_Menuitem_Abstract extends Mage_Adminhtm
 	 * @param JScriptz_MegaMenu2_Model_Menuitem $parentNodeMenuitem
 	 * @param $int $recursionLevel
 	 * @return Varien_Data_Tree_Node
+	 * @author Jason Lotzer
 	 */
 	public function getNode($parentNodeMenuitem, $recursionLevel = 2){
 		$tree = Mage::getResourceModel('megamenu2/menuitem_tree');
@@ -156,6 +164,7 @@ class JScriptz_MegaMenu2_Block_Adminhtml_Menuitem_Abstract extends Mage_Adminhtm
 	 * @access public
 	 * @param array $args
 	 * @return string
+	 * @author Jason Lotzer
 	 */
 	public function getSaveUrl(array $args = array()){
 		$params = array('_current'=>true);
@@ -167,6 +176,7 @@ class JScriptz_MegaMenu2_Block_Adminhtml_Menuitem_Abstract extends Mage_Adminhtm
 	 * @access public
 	 * @param array $args
 	 * @return string
+	 * @author Jason Lotzer
 	 */
 	public function getEditUrl(){
 		return $this->getUrl("*/MegaMenu2_menuitem/edit", array('_current'=>true, '_query'=>false, 'id'=>null, 'parent'=>null));
@@ -175,6 +185,7 @@ class JScriptz_MegaMenu2_Block_Adminhtml_Menuitem_Abstract extends Mage_Adminhtm
 	 * Return root ids
 	 * @access public
 	 * @return array
+	 * @author Jason Lotzer
 	 */
 	public function getRootIds(){
 		return array(Mage::helper('megamenu2/menuitem')->getRootMenuitemId());

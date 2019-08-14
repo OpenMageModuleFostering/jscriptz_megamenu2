@@ -10,15 +10,16 @@
  * http://opensource.org/licenses/mit-license.php
  * 
  * @category   	JScriptz
- * @package	JScriptz_MegaMenu2
+ * @package		JScriptz_MegaMenu2
  * @copyright  	Copyright (c) 2013
- * @license	http://opensource.org/licenses/mit-license.php MIT License
+ * @license		http://opensource.org/licenses/mit-license.php MIT License
  */
 /**
  * Menu Item model
  *
  * @category	JScriptz
- * @package	JScriptz_MegaMenu2
+ * @package		JScriptz_MegaMenu2
+ * @author Jason Lotzer
  */
 class JScriptz_MegaMenu2_Model_Menuitem extends Mage_Core_Model_Abstract{
 	/**
@@ -38,10 +39,13 @@ class JScriptz_MegaMenu2_Model_Menuitem extends Mage_Core_Model_Abstract{
 	 * @var string
 	 */
 	protected $_eventObject = 'menuitem';
+	protected $_menusettingInstance = null;
+	protected $_productInstance = null;
 	/**
 	 * constructor
 	 * @access public
 	 * @return void
+	 * @author Jason Lotzer
 	 */
 	public function _construct(){
 		parent::_construct();
@@ -51,6 +55,7 @@ class JScriptz_MegaMenu2_Model_Menuitem extends Mage_Core_Model_Abstract{
 	 * before save menu item
 	 * @access protected
 	 * @return JScriptz_MegaMenu2_Model_Menuitem
+	 * @author Jason Lotzer
 	 */
 	protected function _beforeSave(){
 		parent::_beforeSave();
@@ -65,6 +70,7 @@ class JScriptz_MegaMenu2_Model_Menuitem extends Mage_Core_Model_Abstract{
 	 * get the menuitem Menu HTML
 	 * @access public
 	 * @return string
+	 * @author Jason Lotzer
 	 */
 	public function getMenuhtml(){
 		$menuhtml = $this->getData('menuhtml');
@@ -77,15 +83,94 @@ class JScriptz_MegaMenu2_Model_Menuitem extends Mage_Core_Model_Abstract{
 	 * save menuitem relation
 	 * @access public
 	 * @return JScriptz_MegaMenu2_Model_Menuitem
+	 * @author Jason Lotzer
 	 */
 	protected function _afterSave() {
+		$this->getProductInstance()->saveMenuitemRelation($this);
+		$this->getMenusettingInstance()->saveMenuitemRelation($this);
 		return parent::_afterSave();
+	}
+	/**
+	 * get product relation model
+	 * @access public
+	 * @return JScriptz_MegaMenu2_Model_Menuitem_Product
+	 * @author Jason Lotzer
+	 */
+	public function getProductInstance(){
+		if (!$this->_productInstance) {
+			$this->_productInstance = Mage::getSingleton('megamenu2/menuitem_product');
+		}
+		return $this->_productInstance;
+	}
+	/**
+	 * get selected products array
+	 * @access public
+	 * @return array
+	 * @author Jason Lotzer
+	 */
+	public function getSelectedProducts(){
+		if (!$this->hasSelectedProducts()) {
+			$products = array();
+			foreach ($this->getSelectedProductsCollection() as $product) {
+				$products[] = $product;
+			}
+			$this->setSelectedProducts($products);
+		}
+		return $this->getData('selected_products');
+	}
+	/**
+	 * Retrieve collection selected products
+	 * @access public
+	 * @return JScriptz_MegaMenu2_Resource_Menuitem_Product_Collection
+	 * @author Jason Lotzer
+	 */
+	public function getSelectedProductsCollection(){
+		$collection = $this->getProductInstance()->getProductCollection($this);
+		return $collection;
+	}
+	/**
+	 * get menusetting relation model
+	 * @access public
+	 * @return JScriptz_MegaMenu2_Model_Menuitem_Menusetting
+	 * @author Jason Lotzer
+	 */
+	public function getMenusettingInstance(){
+		if (!$this->_menusettingInstance) {
+			$this->_menusettingInstance = Mage::getSingleton('megamenu2/menuitem_menusetting');
+		}
+		return $this->_menusettingInstance;
+	}
+	/**
+	 * get selected menusettings array
+	 * @access public
+	 * @return array
+	 * @author Jason Lotzer
+	 */
+	public function getSelectedMenusettings(){
+		if (!$this->hasSelectedMenusettings()) {
+			$menusettings = array();
+			foreach ($this->getSelectedMenusettingsCollection() as $menusetting) {
+				$menusettings[] = $menusetting;
+			}
+			$this->setSelectedMenusettings($menusettings);
+		}
+		return $this->getData('selected_menusettings');
+	}
+	/**
+	 * Retrieve collection selected menusettings
+	 * @access public
+	 * @return JScriptz_MegaMenu2_Model_Menuitem_Menusetting_Collection
+	 * @author Jason Lotzer
+	 */
+	public function getSelectedMenusettingsCollection(){
+		$collection = $this->getMenusettingInstance()->getMenusettingsCollection($this);
+		return $collection;
 	}
 	/**
 	 * get the tree model
 	 * @access public
 	 * @return JScriptz_MegaMenu2_Model_Resource_Menuitem_Tree
-	
+	 * @author Jason Lotzer
 	 */
 	public function getTreeModel(){
 		return Mage::getResourceModel('megamenu2/menuitem_tree');
@@ -94,6 +179,7 @@ class JScriptz_MegaMenu2_Model_Menuitem extends Mage_Core_Model_Abstract{
 	 * get tree model instance
 	 * @access public
 	 * @return JScriptz_MegaMenu2_Model_Resource_Menuitem_Tree
+	 * @author Jason Lotzer
 	 */
 	public function getTreeModelInstance(){
 		if (is_null($this->_treeModel)) {
@@ -107,6 +193,7 @@ class JScriptz_MegaMenu2_Model_Menuitem extends Mage_Core_Model_Abstract{
 	 * @param   int $parentId new parent menu item id
 	 * @param   int $afterMenuitemId menu item id after which we have put current menu item
 	 * @return  JScriptz_MegaMenu2_Model_Menuitem
+	 * @author Jason Lotzer
 	 */
 	public function move($parentId, $afterMenuitemId){
 		$parent = Mage::getModel('megamenu2/menuitem')->load($parentId);
@@ -154,6 +241,7 @@ class JScriptz_MegaMenu2_Model_Menuitem extends Mage_Core_Model_Abstract{
 	 * Get the parent menu item
 	 * @access public
 	 * @return  JScriptz_MegaMenu2_Model_Menuitem
+	 * @author Jason Lotzer
 	 */
 	public function getParentMenuitem(){
 		if (!$this->hasData('parent_menuitem')) {
@@ -165,6 +253,7 @@ class JScriptz_MegaMenu2_Model_Menuitem extends Mage_Core_Model_Abstract{
 	 * Get the parent id
 	 * @access public
 	 * @return  int
+	 * @author Jason Lotzer
 	 */
 	public function getParentId(){
 		$parentIds = $this->getParentIds();
@@ -174,6 +263,7 @@ class JScriptz_MegaMenu2_Model_Menuitem extends Mage_Core_Model_Abstract{
 	 * Get all parent menu items ids
 	 * @access public
 	 * @return array
+	 * @author Jason Lotzer
 	 */
 	public function getParentIds(){
 		return array_diff($this->getPathIds(), array($this->getId()));
@@ -183,6 +273,7 @@ class JScriptz_MegaMenu2_Model_Menuitem extends Mage_Core_Model_Abstract{
 	 * @access public
 	 * @param bool $asArray
 	 * @return mixed (array|string)
+	 * @author Jason Lotzer
 	 */
 	public function getAllChildren($asArray = false){
 		$children = $this->getResource()->getAllChildren($this);
@@ -197,6 +288,7 @@ class JScriptz_MegaMenu2_Model_Menuitem extends Mage_Core_Model_Abstract{
 	 * Get all menu items children
 	 * @access public
 	 * @return string
+	 * @author Jason Lotzer
 	 */
 	public function getChildren(){
 		return implode(',', $this->getResource()->getChildren($this, false));
@@ -205,6 +297,7 @@ class JScriptz_MegaMenu2_Model_Menuitem extends Mage_Core_Model_Abstract{
 	 * check the id
 	 * @access public
 	 * @return bool
+	 * @author Jason Lotzer
 	 */
 	public function checkId($id){
 		return $this->_getResource()->checkId($id);
@@ -213,6 +306,7 @@ class JScriptz_MegaMenu2_Model_Menuitem extends Mage_Core_Model_Abstract{
 	 * Get array menu items ids which are part of menu item path
 	 * @access public
 	 * @return array
+	 * @author Jason Lotzer
 	 */
 	public function getPathIds(){
 		$ids = $this->getData('path_ids');
@@ -226,6 +320,7 @@ class JScriptz_MegaMenu2_Model_Menuitem extends Mage_Core_Model_Abstract{
 	 * Retrieve level
 	 * @access public
 	 * @return int
+	 * @author Jason Lotzer
 	 */
 	public function getLevel(){
 		if (!$this->hasLevel()) {
@@ -238,6 +333,7 @@ class JScriptz_MegaMenu2_Model_Menuitem extends Mage_Core_Model_Abstract{
 	 * @access public
 	 * @param array $ids
 	 * @return bool
+	 * @author Jason Lotzer
 	 */
 	public function verifyIds(array $ids){
 		return $this->getResource()->verifyIds($ids);
@@ -246,6 +342,7 @@ class JScriptz_MegaMenu2_Model_Menuitem extends Mage_Core_Model_Abstract{
 	 * check if menu item has children
 	 * @access public
 	 * @return bool
+	 * @author Jason Lotzer
 	 */
 	public function hasChildren(){
 		return $this->_getResource()->getChildrenAmount($this) > 0;
@@ -254,6 +351,7 @@ class JScriptz_MegaMenu2_Model_Menuitem extends Mage_Core_Model_Abstract{
 	 * check if menu item can be deleted
 	 * @access protected
 	 * @return JScriptz_MegaMenu2_Model_Menuitem
+	 * @author Jason Lotzer
 	 */
 	protected function _beforeDelete(){
 		if ($this->getResource()->isForbiddenToDelete($this->getId())) {
@@ -269,7 +367,7 @@ class JScriptz_MegaMenu2_Model_Menuitem extends Mage_Core_Model_Abstract{
 	 * @param bool $sorted
 	 * @param bool $asCollection
 	 * @param bool $toLoad
-	
+	 * @author Jason Lotzer
 	 */
 	public function getMenuitems($parent, $recursionLevel = 0, $sorted=false, $asCollection=false, $toLoad=true){
 		return $this->getResource()->getMenuitems($parent, $recursionLevel, $sorted, $asCollection, $toLoad);
@@ -278,6 +376,7 @@ class JScriptz_MegaMenu2_Model_Menuitem extends Mage_Core_Model_Abstract{
 	 * Return parent menu items of current menu item
 	 * @access public
 	 * @return array
+	 * @author Jason Lotzer
 	 */
 	public function getParentMenuitems(){
 		return $this->getResource()->getParentMenuitems($this);
@@ -286,6 +385,7 @@ class JScriptz_MegaMenu2_Model_Menuitem extends Mage_Core_Model_Abstract{
 	 * Retuen children menu items of current menu item
 	 * @access public
 	 * @return array
+	 * @author Jason Lotzer
 	 */
 	public function getChildrenMenuitems(){
 		return $this->getResource()->getChildrenMenuitems($this);
@@ -293,7 +393,8 @@ class JScriptz_MegaMenu2_Model_Menuitem extends Mage_Core_Model_Abstract{
 	/**
 	 * check if parents are enabled
 	 * @access public
-	 * @return bool	
+	 * @return bool
+	 * @author Jason Lotzer
 	 */
 	public function getStatusPath(){
 		$parents = $this->getParentMenuitems();

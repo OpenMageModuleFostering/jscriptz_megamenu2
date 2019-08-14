@@ -6,12 +6,12 @@
  * NOTICE OF LICENSE
  * 
  * This source file is subject to the MIT License
- * that is bundled with this package in the file LICENSE.txt.
+ * that is bundled with this @@package in the file LICENSE.txt.
  * It is also available through the world-wide-web at this URL:
  * http://opensource.org/licenses/mit-license.php
  * 
  * @category   	JScriptz
- * @package		JScriptz_MegaMenu2
+ * @@@package		JScriptz_MegaMenu2
  * @copyright  	Copyright (c) 2013
  * @license		http://opensource.org/licenses/mit-license.php MIT License
  */
@@ -19,7 +19,7 @@
 <config>
 	<modules>
 		<JScriptz_MegaMenu2>
-			<version>1.8.0.0</version>
+			<version>1.8.1.8</version>
 		</JScriptz_MegaMenu2>
 	</modules>
 	<global>
@@ -32,14 +32,14 @@
 			</jscriptz_megamenu2_setup>
 		</resources>
 		<blocks>
+			<page>
+	        	<rewrite>
+	            	<html_topmenu>JScriptz_MegaMenu2_Block_Html_Topmenu</html_topmenu>
+	        	</rewrite>
+   			 </page>
 			<megamenu2>
 				<class>JScriptz_MegaMenu2_Block</class>
 			</megamenu2>
-		<page>
-	        <rewrite>
-	            <html_topmenu>JScriptz_MegaMenu2_Block_Html_Topmenu</html_topmenu>
-	        </rewrite>
-   		 </page>
 		</blocks>
 		<helpers>
 			<megamenu2>
@@ -51,6 +51,10 @@
 				<class>JScriptz_MegaMenu2_Model</class>
 				<resourceModel>megamenu2_resource</resourceModel>
 			</megamenu2>
+			<megamenu2_options>
+				<class>JScriptz_MegaMenu2_Model_SystemSettings</class>
+				<resourceModel>megamenu2_resource</resourceModel>
+			</megamenu2_options>
 			<megamenu2_resource>
 				<class>JScriptz_MegaMenu2_Model_Resource</class>
 				<entities>
@@ -60,10 +64,27 @@
 					<menuitem_store>
 						<table>megamenu2_menuitem_store</table>
 					</menuitem_store>
+					<menusetting>
+						<table>megamenu2_menusetting</table>
+					</menusetting>
+					<menusetting_store>
+						<table>megamenu2_menusetting_store</table>
+					</menusetting_store>
+					<menuitem_menusetting>
+						<table>megamenu2_menuitem_menusetting</table>
+					</menuitem_menusetting>
+					<menusetting_menuitem>
+						<table>megamenu2_menuitem_menusetting</table>
+					</menusetting_menuitem>
+					<menuitem_product>
+						<table>megamenu2_menuitem_product</table>
+					</menuitem_product>
+					<menusetting_product>
+						<table>megamenu2_menusetting_product</table>
+					</menusetting_product>
 				</entities>
 			</megamenu2_resource>
 		</models>
-		
 	</global>
 	<frontend>
 			<layout>
@@ -73,7 +94,7 @@
 				</jscriptz_megamenu2>
 			</updates>
 		</layout>
-		</frontend>
+	</frontend>
 	<adminhtml>
 		<layout>
 			<updates>
@@ -91,6 +112,46 @@
 				</JScriptz_MegaMenu2>
 			</modules>
 		</translate>
+		<events>
+			<core_block_abstract_prepare_layout_after>
+				<observers>
+					<menuitem>
+						<type>singleton</type>
+						<class>megamenu2/adminhtml_observer</class>
+						<method>addMenuitemBlock</method>
+					</menuitem>
+				</observers>
+			</core_block_abstract_prepare_layout_after>
+			<catalog_product_save_after>
+				<observers>
+					<menuitem>
+						<type>singleton</type>
+						<class>megamenu2/adminhtml_observer</class>
+						<method>saveMenuitemData</method>
+					</menuitem>
+				</observers>
+			</catalog_product_save_after>
+		</events>
+		<events>
+			<core_block_abstract_prepare_layout_after>
+				<observers>
+					<menusetting>
+						<type>singleton</type>
+						<class>megamenu2/adminhtml_observer</class>
+						<method>addMenusettingBlock</method>
+					</menusetting>
+				</observers>
+			</core_block_abstract_prepare_layout_after>
+			<catalog_product_save_after>
+				<observers>
+					<menusetting>
+						<type>singleton</type>
+						<class>megamenu2/adminhtml_observer</class>
+						<method>saveMenusettingData</method>
+					</menusetting>
+				</observers>
+			</catalog_product_save_after>
+		</events>
 	</adminhtml>
 	<admin>
 		<routers>

@@ -19,14 +19,15 @@
 <layout version="0.1.0">
 	<default translate="label" module="page">
 		<reference name="head">
-	    	<action method="addItem"><type>skin_js</type><name>js/JScriptz/mgmenu.js</name></action>
-	        <action method="addItem"><type>skin_css</type><name>css/JScriptz/mgmenu.css</name><params>media="screen"</params></action>	                
+	    	<action method="addItem" ifconfig="megamenu2_options/options/megamenu2"><type>skin_js</type><name>js/JScriptz/mgmenu.js</name></action>
+	        <action method="addItem" ifconfig="megamenu2_options/options/megamenu2"><type>skin_css</type><name>css/JScriptz/mgmenu.css</name><params>media="screen"</params></action>	                
 	    </reference>
 		<reference name="catalog.topnav">
-	    	<action method="setTemplate"><template>jscriptz/html/topmenu.phtml</template></action>
+	    	<action method="setTemplate" ifconfig="megamenu2_options/options/megamenu2"><template>jscriptz/html/topmenu.phtml</template></action>
 	    </reference>
-	 <reference name="top.menu">
-	    	<action method="setTemplate"><template>jscriptz/html/topmenu.phtml</template></action>
+	 	<reference name="top.menu">
+	    	<action method="setTemplate" ifconfig="megamenu2_options/options/megamenu2"><template>jscriptz/html/topmenu.phtml</template></action>
 	    </reference>
+
 	</default>
 </layout>

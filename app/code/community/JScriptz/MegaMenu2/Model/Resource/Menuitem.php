@@ -10,25 +10,28 @@
  * http://opensource.org/licenses/mit-license.php
  * 
  * @category   	JScriptz
- * @package	JScriptz_MegaMenu2
+ * @package		JScriptz_MegaMenu2
  * @copyright  	Copyright (c) 2013
- * @license	http://opensource.org/licenses/mit-license.php MIT License
+ * @license		http://opensource.org/licenses/mit-license.php MIT License
  */
 /**
  * Menu Item resource model
  *
  * @category	JScriptz
- * @package	JScriptz_MegaMenu2
+ * @package		JScriptz_MegaMenu2
+ * @author Jason Lotzer
  */
 class JScriptz_MegaMenu2_Model_Resource_Menuitem extends Mage_Core_Model_Resource_Db_Abstract{
 	/**
 	 * Menu Item tree object
-	 * @var Varien_Data_Tree_Db	 */
+	 * @var Varien_Data_Tree_Db
+	 */
 	protected $_tree;
 	/**
 	 * constructor
 	 * @access public
 	 * @return void
+	 * @author Jason Lotzer
 	 */
 	public function _construct(){
 		$this->_init('megamenu2/menuitem', 'entity_id');
@@ -39,6 +42,7 @@ class JScriptz_MegaMenu2_Model_Resource_Menuitem extends Mage_Core_Model_Resourc
 	 * @access public
 	 * @param int $menuitemId
 	 * @return array
+	 * @author Jason Lotzer
 	 */
 	public function lookupStoreIds($menuitemId){
 		$adapter = $this->_getReadAdapter();
@@ -52,6 +56,7 @@ class JScriptz_MegaMenu2_Model_Resource_Menuitem extends Mage_Core_Model_Resourc
 	 * @access public
 	 * @param Mage_Core_Model_Abstract $object
 	 * @return JScriptz_MegaMenu2_Model_Resource_Menuitem
+	 * @author Jason Lotzer
 	 */
 	protected function _afterLoad(Mage_Core_Model_Abstract $object){
 		if ($object->getId()) {
@@ -67,7 +72,8 @@ class JScriptz_MegaMenu2_Model_Resource_Menuitem extends Mage_Core_Model_Resourc
 	 * @param string $field
 	 * @param mixed $value
 	 * @param JScriptz_MegaMenu2_Model_Menuitem $object
-	 * @return Zend_Db_Select	 */
+	 * @return Zend_Db_Select
+	 */
 	protected function _getLoadSelect($field, $value, $object){
 		$select = parent::_getLoadSelect($field, $value, $object);
 		if ($object->getStoreId()) {
@@ -87,6 +93,7 @@ class JScriptz_MegaMenu2_Model_Resource_Menuitem extends Mage_Core_Model_Resourc
 	 * Retrieve menu item tree object
 	 * @access protected
 	 * @return Varien_Data_Tree_Db
+	 * @author Jason Lotzer
 	 */
 	protected function _getTree(){
 		if (!$this->_tree) {
@@ -101,6 +108,7 @@ class JScriptz_MegaMenu2_Model_Resource_Menuitem extends Mage_Core_Model_Resourc
 	 * @access protected
 	 * @param Varien_Object $object
 	 * @return JScriptz_MegaMenu2_Model_Resource_Menuitem
+	 * @author Jason Lotzer
 	 */
 	protected function _beforeDelete(Mage_Core_Model_Abstract $object){
 		parent::_beforeDelete($object);
@@ -122,6 +130,7 @@ class JScriptz_MegaMenu2_Model_Resource_Menuitem extends Mage_Core_Model_Resourc
 	 * @access public
 	 * @param Varien_Object $object
 	 * @return JScriptz_MegaMenu2_Model_Resource_Menuitem
+	 * @author Jason Lotzer
 	 */
 	public function deleteChildren(Varien_Object $object){
 		$adapter = $this->_getWriteAdapter();
@@ -148,6 +157,7 @@ class JScriptz_MegaMenu2_Model_Resource_Menuitem extends Mage_Core_Model_Resourc
 	 * @access protected
 	 * @param Varien_Object $object
 	 * @return JScriptz_MegaMenu2_Model_Resource_Menuitem
+	 * @author Jason Lotzer
 	 */
 	protected function _afterSave(Mage_Core_Model_Abstract $object){
 		if (substr($object->getPath(), -1) == '/') {
@@ -187,6 +197,7 @@ class JScriptz_MegaMenu2_Model_Resource_Menuitem extends Mage_Core_Model_Resourc
 	 * @access protected
 	 * @param JScriptz_MegaMenu2_Model_Menuitem $object
 	 * @return JScriptz_MegaMenu2_Model_Resource_Menuitem
+	 * @author Jason Lotzer
 	 */
 	protected function _savePath($object){
 		if ($object->getId()) {
@@ -204,6 +215,7 @@ class JScriptz_MegaMenu2_Model_Resource_Menuitem extends Mage_Core_Model_Resourc
 	 * @access protected
 	 * @param string $path
 	 * @return int
+	 * @author Jason Lotzer
 	 */
 	protected function _getMaxPosition($path){
 		$adapter = $this->getReadConnection();
@@ -229,6 +241,7 @@ class JScriptz_MegaMenu2_Model_Resource_Menuitem extends Mage_Core_Model_Resourc
 	 * @access public
 	 * @param int $menuitemId
 	 * @return int
+	 * @author Jason Lotzer
 	 */
 	public function getChildrenCount($menuitemId){
 		$select = $this->_getReadAdapter()->select()
@@ -242,6 +255,7 @@ class JScriptz_MegaMenu2_Model_Resource_Menuitem extends Mage_Core_Model_Resourc
 	 * @access public
 	 * @param int $entityId
 	 * @return bool
+	 * @author Jason Lotzer
 	 */
 	public function checkId($entityId){
 		$select = $this->_getReadAdapter()->select()
@@ -256,6 +270,7 @@ class JScriptz_MegaMenu2_Model_Resource_Menuitem extends Mage_Core_Model_Resourc
 	 * @access public
 	 * @param array $ids
 	 * @return array
+	 * @author Jason Lotzer
 	 */
 	public function verifyIds(array $ids){
 		if (empty($ids)) {
@@ -273,6 +288,7 @@ class JScriptz_MegaMenu2_Model_Resource_Menuitem extends Mage_Core_Model_Resourc
 	 * @access protected
 	 * @param Varien_Object $object
 	 * @return JScriptz_MegaMenu2_Model_Resource_Menuitem
+	 * @author Jason Lotzer
 	 */
 	protected function _beforeSave(Mage_Core_Model_Abstract $object){
 		parent::_beforeSave($object);
@@ -306,6 +322,7 @@ class JScriptz_MegaMenu2_Model_Resource_Menuitem extends Mage_Core_Model_Resourc
 	 * @param JScriptz_MegaMenu2_Model_Menuitem $menuitem
 	 * @param bool $isActiveFlag
 	 * @return int
+	 * @author Jason Lotzer
 	 */
 	public function getChildrenAmount($menuitem, $isActiveFlag = true){
 		$bind = array(
@@ -323,6 +340,7 @@ class JScriptz_MegaMenu2_Model_Resource_Menuitem extends Mage_Core_Model_Resourc
 	 * @access public
 	 * @param JScriptz_MegaMenu2_Model_Menuitem $menuitem
 	 * @return array
+	 * @author Jason Lotzer
 	 */
 	public function getParentMenuitems($menuitem){
 		$pathIds = array_reverse(explode('/', $menuitem->getPath()));
@@ -338,6 +356,7 @@ class JScriptz_MegaMenu2_Model_Resource_Menuitem extends Mage_Core_Model_Resourc
 	 * @access public
 	 * @param JScriptz_MegaMenu2_Model_Menuitem $menuitem
 	 * @return JScriptz_MegaMenu2_Model_Resource_Menuitem_Collection
+	 * @author Jason Lotzer
 	 */
 	public function getChildrenMenuitems($menuitem){
 		$collection = $menuitem->getCollection();
@@ -354,6 +373,7 @@ class JScriptz_MegaMenu2_Model_Resource_Menuitem extends Mage_Core_Model_Resourc
 	 * @param JScriptz_MegaMenu2_Model_Menuitem $menuitem
 	 * @param boolean $recursive
 	 * @return array
+	 * @author Jason Lotzer
 	 */
 	public function getChildren($menuitem, $recursive = true){
 		$bind = array(
@@ -378,6 +398,7 @@ class JScriptz_MegaMenu2_Model_Resource_Menuitem extends Mage_Core_Model_Resourc
 	 * @param boolean $asCollection
 	 * @param boolean $toLoad
 	 * @return Varien_Data_Tree_Node_Collection|JScriptz_MegaMenu2_Model_Resource_Menuitem_Collection
+	 * @author Jason Lotzer
 	 */
 	public function getMenuitems($parent, $recursionLevel = 0, $sorted = false, $asCollection = false, $toLoad = true){
 		$tree = Mage::getResourceModel('megamenu2/menuitem_tree');
@@ -395,6 +416,7 @@ class JScriptz_MegaMenu2_Model_Resource_Menuitem extends Mage_Core_Model_Resourc
 	 * @access public
 	 * @param JScriptz_MegaMenu2_Model_Menuitem $menuitem
 	 * @return array
+	 * @author Jason Lotzer
 	 */
 	public function getAllChildren($menuitem){
 		$children = $this->getChildren($menuitem);
@@ -407,6 +429,7 @@ class JScriptz_MegaMenu2_Model_Resource_Menuitem extends Mage_Core_Model_Resourc
 	 * @access public
 	 * @param integer $menuitemId
 	 * @return boolean
+	 * @author Jason Lotzer
 	 */
 	public function isForbiddenToDelete($menuitemId){
 		return ($menuitemId == Mage::helper('megamenu2/menuitem')->getRootMenuitemId());
@@ -416,6 +439,7 @@ class JScriptz_MegaMenu2_Model_Resource_Menuitem extends Mage_Core_Model_Resourc
 	 * @access public
 	 * @param int $menuitemId
 	 * @return string
+	 * @author Jason Lotzer
 	 */
 	public function getMenuitemPathById($menuitemId){
 		$select = $this->getReadConnection()->select()
@@ -431,6 +455,7 @@ class JScriptz_MegaMenu2_Model_Resource_Menuitem extends Mage_Core_Model_Resourc
 	 * @param JScriptz_MegaMenu2_Model_Menuitem $newParent
 	 * @param null|int $afterMenuitemId
 	 * @return JScriptz_MegaMenu2_Model_Resource_Menuitem
+	 * @author Jason Lotzer
 	 */
 	public function changeParent(JScriptz_MegaMenu2_Model_Menuitem $menuitem, JScriptz_MegaMenu2_Model_Menuitem $newParent, $afterMenuitemId = null){
 		$childrenCount  = $this->getChildrenCount($menuitem->getId()) + 1;
@@ -497,6 +522,7 @@ class JScriptz_MegaMenu2_Model_Resource_Menuitem extends Mage_Core_Model_Resourc
 	 * @param JScriptz_MegaMenu2_Model_Menuitem $newParent
 	 * @param null|int $afterMenuitemId
 	 * @return int
+	 * @author Jason Lotzer
 	 */
 	protected function _processPositions($menuitem, $newParent, $afterMenuitemId){
 		$table  = $this->getMainTable();

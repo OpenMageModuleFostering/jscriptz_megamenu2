@@ -1,32 +1,233 @@
 <?xml version="1.0"?>
+
 <!--
 /**
  * JScriptz_MegaMenu2 extension
+
  * 
+
  * NOTICE OF LICENSE
+
  * 
+
  * This source file is subject to the MIT License
+
  * that is bundled with this package in the file LICENSE.txt.
+
  * It is also available through the world-wide-web at this URL:
+
  * http://opensource.org/licenses/mit-license.php
+
  * 
+
  * @category   	JScriptz
+
  * @package		JScriptz_MegaMenu2
+
  * @copyright  	Copyright (c) 2013
+
  * @license		http://opensource.org/licenses/mit-license.php MIT License
  */
 --> 
+
 <layout>
-	<adminhtml_megamenu2_menuitem_edit>
-		<update handle="editor"/>
-		<reference name="left">
-			<block name="menuitem.tree" type="megamenu2/adminhtml_menuitem_tree" />
+
+	<!-- Menu Settings grid action -->
+
+	<adminhtml_megamenu2_menusetting_index>
+
+		<reference name="menu">
+
+			<action method="setActive">
+
+				<menupath>MegaMenu2/menusetting</menupath>
+
+			</action>
+
 		</reference>
+
 		<reference name="content">
+
+			<block type="megamenu2/adminhtml_menusetting" name="menusetting" />
+
+		</reference>
+
+	</adminhtml_megamenu2_menusetting_index>
+
+	<adminhtml_megamenu2_menusetting_grid>
+
+		<block type="core/text_list" name="root" output="toHtml">
+
+			<block type="megamenu2/adminhtml_menusetting_grid" name="menusetting_grid"/>
+
+		</block>
+
+	</adminhtml_megamenu2_menusetting_grid>
+
+	<!-- Menusetting add/edit action -->
+
+	<adminhtml_megamenu2_menusetting_edit>
+
+		<update handle="editor"/>
+
+		<reference name="menu">
+
+			<action method="setActive">
+
+				<menupath>MegaMenu2/menusetting</menupath>
+
+			</action>
+
+		</reference>
+
+		<reference name="content">
+
+			<block type="megamenu2/adminhtml_menusetting_edit" name="menusetting_edit"></block>
+
+		</reference>
+
+		<reference name="left">
+
+			<block type="megamenu2/adminhtml_menusetting_edit_tabs" name="menusetting_tabs"></block>
+
+		</reference> 
+
+	</adminhtml_megamenu2_menusetting_edit>
+
+	<adminhtml_megamenu2_menusetting_catalog_product_menusettings>
+
+		<block type="core/text_list" name="root" output="toHtml">
+
+			<block type="megamenu2/adminhtml_catalog_product_edit_tab_menusetting" name="product.edit.tab.menusetting"/>
+
+			<block type="adminhtml/widget_grid_serializer" name="menusetting_grid_serializer">
+
+				<reference name="menusetting_grid_serializer">
+
+					<action method="initSerializerBlock">
+
+						<grid_block_name>product.edit.tab.menusetting</grid_block_name>
+
+						<data_callback>getSelectedMenusettings</data_callback>
+
+						<hidden_input_name>menusettings</hidden_input_name>
+
+						<reload_param_name>product_menusettings</reload_param_name>
+
+					</action>
+
+					<action method="addColumnInputName">
+
+						<input_name>position</input_name>
+
+					</action>
+
+				</reference>
+
+			</block>
+
+		</block>
+
+	</adminhtml_megamenu2_menusetting_catalog_product_menusettings>
+
+	<adminhtml_megamenu2_menusetting_catalog_product_menusettingsgrid>
+
+		<block type="core/text_list" name="root" output="toHtml">
+
+			<block type="megamenu2/adminhtml_catalog_product_edit_tab_menusetting" name="product.edit.tab.menusetting"/>
+
+		</block>
+
+	</adminhtml_megamenu2_menusetting_catalog_product_menusettingsgrid>
+
+	<adminhtml_megamenu2_menusetting_products>
+
+		<block type="core/text_list" name="root" output="toHtml">
+
+			<block type="megamenu2/adminhtml_menusetting_edit_tab_product" name="menusetting.edit.tab.product"/>
+
+			<block type="adminhtml/widget_grid_serializer" name="product_grid_serializer">
+
+				<reference name="product_grid_serializer">
+
+					<action method="initSerializerBlock">
+
+						<grid_block_name>menusetting.edit.tab.product</grid_block_name>
+
+							<data_callback>getSelectedProducts</data_callback>
+
+							<hidden_input_name>products</hidden_input_name>
+
+							<reload_param_name>menusetting_products</reload_param_name>
+
+					</action>
+
+					<action method="addColumnInputName">
+
+						<input_name>position</input_name>
+
+					</action>
+
+				</reference>
+
+			</block>
+
+		</block>
+
+	</adminhtml_megamenu2_menusetting_products>
+
+	<adminhtml_megamenu2_menusetting_productsgrid>
+
+		<block type="core/text_list" name="root" output="toHtml">
+
+			<block type="megamenu2/adminhtml_menusetting_edit_tab_product" name="menusetting.edit.tab.product"/>
+
+		</block>
+
+	</adminhtml_megamenu2_menusetting_productsgrid>
+
+	<adminhtml_megamenu2_menuitem_edit>
+
+		<update handle="editor"/>
+
+		<reference name="left">
+
+			<block name="menuitem.tree" type="megamenu2/adminhtml_menuitem_tree" />
+
+		</reference>
+
+		<reference name="content">
+
 			<block name="menuitem.edit" type="megamenu2/adminhtml_menuitem_edit" template="jscriptz_megamenu2/menuitem/edit.phtml" />
+
 		</reference>
+
 		<reference name="js">
+
 			<block type="core/template" template="catalog/wysiwyg/js.phtml" name="catalog.wysiwyg.js" />
+
 		</reference>
+
 	</adminhtml_megamenu2_menuitem_edit>
+
+	<adminhtml_megamenu2_menuitem_catalog_product_menuitems>
+
+		<block type="core/text_list" name="root" output="toHtml">
+
+			<block type="megamenu2/adminhtml_catalog_product_edit_tab_menuitem" name="catalog.product.edit.tab.menuitems"/>
+
+		</block>
+
+	</adminhtml_megamenu2_menuitem_catalog_product_menuitems>
+
+	<adminhtml_megamenu2_menusetting_menuitems>
+
+		<block type="core/text_list" name="root" output="toHtml">
+
+			<block type="megamenu2/adminhtml_menusetting_edit_tab_menuitem" name="menusetting.edit.tab.menuitem"/>
+
+		</block>
+
+	</adminhtml_megamenu2_menusetting_menuitems>
+
 </layout>

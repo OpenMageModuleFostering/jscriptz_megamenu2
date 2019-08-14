@@ -10,21 +10,23 @@
  * http://opensource.org/licenses/mit-license.php
  * 
  * @category   	JScriptz
- * @package	JScriptz_MegaMenu2
+ * @package		JScriptz_MegaMenu2
  * @copyright  	Copyright (c) 2013
- * @license	http://opensource.org/licenses/mit-license.php MIT License
+ * @license		http://opensource.org/licenses/mit-license.php MIT License
  */
 /**
  * Menu Item admin tree block
  *
  * @category	JScriptz
- * @package	JScriptz_MegaMenu2
+ * @package		JScriptz_MegaMenu2
+ * @author Jason Lotzer
  */
 class JScriptz_MegaMenu2_Block_Adminhtml_Menuitem_Tree extends JScriptz_MegaMenu2_Block_Adminhtml_Menuitem_Abstract{
 	/**
 	 * constructor
 	 * @access public
 	 * @return void
+	 * @author Jason Lotzer
 	 */
 	public function __construct(){
 		parent::__construct();
@@ -36,6 +38,7 @@ class JScriptz_MegaMenu2_Block_Adminhtml_Menuitem_Tree extends JScriptz_MegaMenu
 	 * prepare the layout
 	 * @access protected
 	 * @return JScriptz_MegaMenu2_Block_Adminhtml_Menuitem_Tree
+	 * @author Jason Lotzer
 	 */
 	protected function _prepareLayout(){
 		$addUrl = $this->getUrl("*/*/add", array(
@@ -44,7 +47,7 @@ class JScriptz_MegaMenu2_Block_Adminhtml_Menuitem_Tree extends JScriptz_MegaMenu
 			'_query' => false
 		));
 		
-		$this->setChild('add_sub_button',
+		/*$this->setChild('add_sub_button',
 			$this->getLayout()->createBlock('adminhtml/widget_button')
 				->setData(array(
 					'label' => Mage::helper('megamenu2')->__('Add Child Menu Item'),
@@ -54,11 +57,11 @@ class JScriptz_MegaMenu2_Block_Adminhtml_Menuitem_Tree extends JScriptz_MegaMenu
 					'style' => $this->canAddChild() ? '' : 'display: none;'
 				))
 		);
-		
+		*/
 		$this->setChild('add_root_button',
 			$this->getLayout()->createBlock('adminhtml/widget_button')
 				->setData(array(
-					'label' => Mage::helper('megamenu2')->__('Add Root Menu Item'),
+					'label' => Mage::helper('megamenu2')->__('Add Menu Item'),
 					'onclick'   => "addNew('".$addUrl."', true)",
 					'class' => 'add',
 					'id'=> 'add_root_menuitem_button'
@@ -70,6 +73,7 @@ class JScriptz_MegaMenu2_Block_Adminhtml_Menuitem_Tree extends JScriptz_MegaMenu
 	 * get the menu item collection
 	 * @access public
 	 * @return JScriptz_MegaMenu2_Model_Resource_Menuitem_Collection
+	 * @author Jason Lotzer
 	 */
 	public function getMenuitemCollection(){
 		$collection = $this->getData('menuitem_collection');
@@ -83,6 +87,7 @@ class JScriptz_MegaMenu2_Block_Adminhtml_Menuitem_Tree extends JScriptz_MegaMenu
 	 * get html for add root button
 	 * @access public
 	 * @return string
+	 * @author Jason Lotzer
 	 */
 	public function getAddRootButtonHtml(){
 		return $this->getChildHtml('add_root_button');
@@ -91,6 +96,7 @@ class JScriptz_MegaMenu2_Block_Adminhtml_Menuitem_Tree extends JScriptz_MegaMenu
 	 * get html for add child button
 	 * @access public
 	 * @return string
+	 * @author Jason Lotzer
 	 */
 	public function getAddSubButtonHtml(){
 		return $this->getChildHtml('add_sub_button');
@@ -99,6 +105,7 @@ class JScriptz_MegaMenu2_Block_Adminhtml_Menuitem_Tree extends JScriptz_MegaMenu
 	 * get html for expand button
 	 * @access public
 	 * @return string
+	 * @author Jason Lotzer
 	 */
 	public function getExpandButtonHtml(){
 		return $this->getChildHtml('expand_button');
@@ -107,6 +114,7 @@ class JScriptz_MegaMenu2_Block_Adminhtml_Menuitem_Tree extends JScriptz_MegaMenu
 	 * get html for add collapse button
 	 * @access public
 	 * @return string
+	 * @author Jason Lotzer
 	 */
 	public function getCollapseButtonHtml(){
 		return $this->getChildHtml('collapse_button');
@@ -116,6 +124,7 @@ class JScriptz_MegaMenu2_Block_Adminhtml_Menuitem_Tree extends JScriptz_MegaMenu
 	 * @access public
 	 * @param mxed $expanded
 	 * @return string
+	 * @author Jason Lotzer
 	 */
 	public function getLoadTreeUrl($expanded=null){
 		$params = array('_current'=>true, 'id'=>null,'store'=>null);
@@ -128,14 +137,16 @@ class JScriptz_MegaMenu2_Block_Adminhtml_Menuitem_Tree extends JScriptz_MegaMenu
 	 * get url for loading nodes
 	 * @access public
 	 * @return string
+	 * @author Jason Lotzer
 	 */
 	public function getNodesUrl(){
-		return $this->getUrl('*/megamenu2_menuitems/jsonTree');
+		return $this->getUrl('*/MegaMenu2_menuitems/jsonTree');
 	}
 	/**
 	 * check if tree is expanded
 	 * @access public
 	 * @return string
+	 * @author Jason Lotzer
 	 */
 	public function getIsWasExpanded(){
 		return Mage::getSingleton('admin/session')->getMenuitemIsTreeWasExpanded();
@@ -144,15 +155,17 @@ class JScriptz_MegaMenu2_Block_Adminhtml_Menuitem_Tree extends JScriptz_MegaMenu
 	 * get url for moving menu item
 	 * @access public
 	 * @return string
+	 * @author Jason Lotzer
 	 */
 	public function getMoveUrl(){
-		return $this->getUrl('*/megamenu2_menuitem/move');
+		return $this->getUrl('*/MegaMenu2_menuitem/move');
 	}
 	/**
 	 * get the tree as json
 	 * @access public
 	 * @param mixed $parentNodeMenuitem
 	 * @return string
+	 * @author Jason Lotzer
 	 */
 	public function getTree($parentNodeMenuitem = null){
 		$rootArray = $this->_getNodeJson($this->getRoot($parentNodeMenuitem));
@@ -164,6 +177,7 @@ class JScriptz_MegaMenu2_Block_Adminhtml_Menuitem_Tree extends JScriptz_MegaMenu
 	 * @access public
 	 * @param mixed $parentNodeMenuitem
 	 * @return string
+	 * @author Jason Lotzer
 	 */
 	public function getTreeJson($parentNodeMenuitem = null){
 		$rootArray = $this->_getNodeJson($this->getRoot($parentNodeMenuitem));
@@ -177,6 +191,7 @@ class JScriptz_MegaMenu2_Block_Adminhtml_Menuitem_Tree extends JScriptz_MegaMenu
 	 * @param string $path
 	 * @param string $javascriptVarName
 	 * @return string
+	 * @author Jason Lotzer
 	 */
 	public function getBreadcrumbsJavascript($path, $javascriptVarName){
 		if (empty($path)) {
@@ -203,6 +218,7 @@ class JScriptz_MegaMenu2_Block_Adminhtml_Menuitem_Tree extends JScriptz_MegaMenu
 	 * @param Varien_Data_Tree_Node|array $node
 	 * @param int $level
 	 * @return string
+	 * @author Jason Lotzer
 	 */
 	protected function _getNodeJson($node, $level = 0){
 		// create a node from data array
@@ -245,6 +261,7 @@ class JScriptz_MegaMenu2_Block_Adminhtml_Menuitem_Tree extends JScriptz_MegaMenu
 	 * @access public
 	 * @param Varien_Object $node
 	 * @return string
+	 * @author Jason Lotzer
 	 */
 	public function buildNodeName($node){
 		$result = $this->htmlEscape($node->getLinktitle());
@@ -255,6 +272,7 @@ class JScriptz_MegaMenu2_Block_Adminhtml_Menuitem_Tree extends JScriptz_MegaMenu
 	 * @access protected
 	 * @param Varien_Object $node
 	 * @return bool
+	 * @author Jason Lotzer
 	 */
 	protected function _isMenuitemMoveable($node){
 		return true;
@@ -264,7 +282,7 @@ class JScriptz_MegaMenu2_Block_Adminhtml_Menuitem_Tree extends JScriptz_MegaMenu
 	 * @access protected
 	 * @param Varien_Object $node
 	 * @return bool
-	
+	 * @author Jason Lotzer
 	 */
 	protected function _isParentSelectedMenuitem($node){
 		if ($node && $this->getMenuitem()) {
@@ -280,6 +298,7 @@ class JScriptz_MegaMenu2_Block_Adminhtml_Menuitem_Tree extends JScriptz_MegaMenu
 	 * Check if page loaded by outside link to menu item edit
 	 * @access public
 	 * @return boolean
+	 * @author Jason Lotzer
 	 */
 	public function isClearEdit(){
 		return (bool) $this->getRequest()->getParam('clear');
@@ -288,6 +307,7 @@ class JScriptz_MegaMenu2_Block_Adminhtml_Menuitem_Tree extends JScriptz_MegaMenu
 	 * Check availability of adding root menu item
 	 * @access public
 	 * @return boolean
+	 * @author Jason Lotzer
 	 */
 	public function canAddRootMenuitem(){
 		return true;

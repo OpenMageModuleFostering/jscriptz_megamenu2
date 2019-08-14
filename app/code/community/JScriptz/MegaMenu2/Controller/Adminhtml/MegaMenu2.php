@@ -10,16 +10,16 @@
  * http://opensource.org/licenses/mit-license.php
  * 
  * @category   	JScriptz
- * @package	JScriptz_MegaMenu2
+ * @package		JScriptz_MegaMenu2
  * @copyright  	Copyright (c) 2013
- * @license	http://opensource.org/licenses/mit-license.php MIT License
+ * @license		http://opensource.org/licenses/mit-license.php MIT License
  */
 /**
  * module base admin controller
  *
  * @category	JScriptz
- * @package	JScriptz_MegaMenu2
-
+ * @package		JScriptz_MegaMenu2
+ * @author Jason Lotzer
  */
 class JScriptz_MegaMenu2_Controller_Adminhtml_MegaMenu2 extends Mage_Adminhtml_Controller_Action{
 	/**
@@ -28,7 +28,8 @@ class JScriptz_MegaMenu2_Controller_Adminhtml_MegaMenu2 extends Mage_Adminhtml_C
 	 * @param string $input
 	 * @param string $destinationFolder
 	 * @param array $data
-	 * @return string	
+	 * @return string
+	 * @author Jason Lotzer
 	 */
 	protected function _uploadAndGetName($input, $destinationFolder, $data){
 		try{

@@ -28,8 +28,8 @@ Mage::getModel('megamenu2/menuitem')
 	->setLinktitle('ROOT')
 	->setInitialSetupFlag(true)
 	->save();
-Mage::getModel('megamenu2/menuitem')->load(2)->setLinktitle('Products')->setParentId(1)->setPath(1)->setLevel(0)->setPosition(1)->setChildrenCount(0)->setStatus(1)->save();	
-Mage::getModel('megamenu2/menuitem')->load(3)->setLinktitle('jQuery Tabs')->setParentId(1)->setPath(1)->setLevel(0)->setPosition(2)->setChildrenCount(0)->setStatus(1)->setMenuhtml("<div class='dropdown_fullwidth mgmenu_tabs' style='display: none;'><!-- Begin Item Container -->
+Mage::getModel('megamenu2/menuitem')->load(2)->setLinktitle('Products')->setParentId(1)->setLinktype(1)->setPath(1)->setLinkimage('/p/r/prod_icon.png')->setLevel(0)->setLinkclass('topnav-link')->setPosition(1)->setChildrenCount(0)->setStatus(1)->save();	
+Mage::getModel('megamenu2/menuitem')->load(3)->setLinktitle('jQuery Tabs')->setParentId(1)->setLinktype(2)->setPath(1)->setLevel(0)->setPosition(3)->setChildrenCount(0)->setStatus(1)->setLinkclass('topnav-link')->setMenuhtml("<div class='dropdown_fullwidth mgmenu_tabs' style='display: none;'><!-- Begin Item Container -->
                 
 
                     <ul class='mgmenu_tabs_nav'>
@@ -79,7 +79,7 @@ Mage::getModel('megamenu2/menuitem')->load(3)->setLinktitle('jQuery Tabs')->setP
                                 <h4>This is a half width container</h4>
                                 <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Cras pharetra tincidunt.</p>
                             </div>
-
+			    <div style='clear:both'></div>
                             <div class='col_4'>
                                 <h4>1/3 container</h4>
                                 <p>Nunc in lectus nec erat adipiscing ultrices. Donec ac scelerisque neque.</p>
@@ -216,7 +216,7 @@ Mage::getModel('megamenu2/menuitem')->load(3)->setLinktitle('jQuery Tabs')->setP
             </li><!-- End Item -->")->save();
 
 
-Mage::getModel('megamenu2/menuitem')->load(4)->setParentId(1)->setLinktitle('Video Example')->setPath(1)->setLevel(0)->setPosition(3)->setChildrenCount(0)->setStatus(1)->setMenuhtml("<div class='dropdown_container dropdown_5columns' style='display: none;'><!-- Begin Item Container -->
+Mage::getModel('megamenu2/menuitem')->load(4)->setParentId(1)->setLinktype(2)->setLinktitle('Video Example')->setPath(1)->setLevel(0)->setPosition(4)->setChildrenCount(0)->setStatus(1)->setLinkclass('topnav-link')->setMenuhtml("<div class='dropdown_container dropdown_5columns' style='display: none;'><!-- Begin Item Container -->
 
 
                     <div class='col_12'>
@@ -232,4 +232,42 @@ Mage::getModel('megamenu2/menuitem')->load(4)->setParentId(1)->setLinktitle('Vid
 
                 </div><!-- End Item Container -->")->save();
 
-Mage::getModel('megamenu2/menuitem')->load(5)->setParentId(1)->setLinktitle('Link Example')->setLinkpath('http://www.gobingya.com')->setLinktarget('blank')->setPath(1)->setLevel(0)->setPosition(4)->setChildrenCount(0)->setStatus(1)->save();
+Mage::getModel('megamenu2/menuitem')->load(5)->setParentId(1)->setLinktype(0)->setLinktitle('Link Example')->setLinkpath('http://www.gobingya.com')->setLinkclass('topnav-link')->setLinktarget('blank')->setPath(1)->setLevel(0)->setPosition(5)->setChildrenCount(0)->setStatus(1)->save();
+Mage::getModel('megamenu2/menuitem')->load(6)->setParentId(1)->setLinktype(4)->setLinktitle('Featured')->setLinkpath('')->setLinkclass('topnav-link')->setLinktarget('self')->setMenuhtml("<h4 class=\"featured\">Featured Products</h4>")->setPath(1)->setLevel(0)->setPosition(2)->setChildrenCount(0)->setStatus(1)->save();
+Mage::getModel('megamenu2/menuitem')->load(7)->setParentId(1)->setLinktype(3)->setLinktitle('Contact Us')->setPath(1)->setLevel(0)->setPosition(6)->setChildrenCount(0)->setStatus(1)->save();
+
+Mage::getModel('megamenu2/menusetting')->load(7)
+	->setMenutitle('Main Menu')
+	->setdisablemenu(0)
+	->save();
+	
+Mage::getModel('megamenu2/menuitem_menusetting')->load(8)
+	->setMenuitemId(2)
+	->setMenusettingId(1)
+	->setPosition(0)
+	->save();
+Mage::getModel('megamenu2/menuitem_menusetting')->load(9)
+	->setMenuitemId(3)
+	->setMenusettingId(1)
+	->setPosition(1)
+	->save();
+Mage::getModel('megamenu2/menuitem_menusetting')->load(10)
+	->setMenuitemId(4)
+	->setMenusettingId(1)
+	->setPosition(3)
+	->save();
+Mage::getModel('megamenu2/menuitem_menusetting')->load(11)
+	->setMenuitemId(5)
+	->setMenusettingId(1)
+	->setPosition(4)
+	->save();
+Mage::getModel('megamenu2/menuitem_menusetting')->load(12)
+	->setMenuitemId(6)
+	->setMenusettingId(1)
+	->setPosition(5)
+	->save();
+Mage::getModel('megamenu2/menuitem_menusetting')->load(13)
+	->setMenuitemId(7)
+	->setMenusettingId(1)
+	->setPosition(2)
+	->save();

@@ -48,9 +48,33 @@ class JScriptz_MegaMenu2_Block_Html_Topmenu extends Mage_Core_Block_Template
         ));
     }
 
-       public function getMenuItem($entityID){
+   public function isMenuDisabled($entityID = 1){
+   
+   $menusettings = Mage::getModel('megamenu2/menusetting');
+   $menusettings->load($entityID);
+   return $menusettings->getData('disablemenu');
+   
+   }
+  public function mySort($a,$b){
+           if ($a->position == $b->position) {
+    return 0;
+  }
+  return ($a->position < $b->position) ? -1 : 1;
+  }
+  public function getSorted($sortArray){
+ usort($sortArray, "mySort");
+   return $sortArray;
+  }
+   public function getMenuItem($entityID){
    
    $mytable = Mage::getModel('megamenu2/menuitem')->getCollection()->getData();
+   return $mytable;
+   
+   }
+      public function getMenuItemSettings($entityID = 1){
+   
+   $mytable = Mage::getModel('megamenu2/menuitem_menusetting')->getCollection();
+   $mytable->getData('menuitem_id');
    return $mytable;
    
    }
@@ -90,11 +114,12 @@ class JScriptz_MegaMenu2_Block_Html_Topmenu extends Mage_Core_Block_Template
      */
     protected function _getHtml(Varien_Data_Tree_Node $menuTree, $childrenWrapClass)
     {
+        if(Mage::getStoreConfig('megamenu2_options/options/megamenu2')){
         $html = '';
 
         $children = $menuTree->getChildren();
         $parentLevel = $menuTree->getLevel();
-        $childLevel = is_null($parentLevel) ? 0 : $parentLevel + 1;
+        $childLevel = empty($parentLevel) ? 0 : $parentLevel + 1;
 
         $counter = 1;
         $childrenCount = $children->count();
@@ -122,23 +147,69 @@ class JScriptz_MegaMenu2_Block_Html_Topmenu extends Mage_Core_Block_Template
 
             if ($child->hasChildren()) {
             $html .= "<li class='dropdown_parent'>";
-            $html .= '<a href="' . $child->getUrl() . '" ' . $outermostClassCode . '><span>'
+            $html .= '<a href="' . $child->getUrl() .'" title="'.$this->escapeHtml($child->getName()). '" ' . $outermostClassCode . '><span>'
                 . $this->escapeHtml($child->getName()) . '</span></a>';
-                /*if (!empty($childrenWrapClass)) {
-                    $html .= '<div class="' . $childrenWrapClass . '">';
-                }*/
+
                 $html .= "<ul class='dropdown_flyout_level' style='display:none'>";
                 $html .= $this->_getHtml($child, $childrenWrapClass);
-                $html .= '</ul>';
-
-                /*if (!empty($childrenWrapClass)) {
-                    $html .= '</div>';
-                }*/
+                $html .= '</ul></li>';
             }
             else{
             $html .= "<li>";
-            $html .= '<a href="' . $child->getUrl() . '" ' . $outermostClassCode . '><span>'
+            $html .= '<a href="' . $child->getUrl() . '" title="'.$this->escapeHtml($child->getName()).'" ' . $outermostClassCode . '><span>'
                 . $this->escapeHtml($child->getName()) . '</span></a></li>';
+            
+            }
+           
+
+            $counter++;
+        }
+
+        return $html;
+        }
+        else{
+         $html = '';
+
+        $children = $menuTree->getChildren();
+        $parentLevel = $menuTree->getLevel();
+        $childLevel = is_null($parentLevel) ? 0 : $parentLevel + 1;
+
+        $counter = 1;
+        $childrenCount = $children->count();
+
+        $parentPositionClass = $menuTree->getPositionClass();
+        $itemPositionClassPrefix = $parentPositionClass ? $parentPositionClass . '-' : 'nav-';
+
+        foreach ($children as $child) {
+
+            $child->setLevel($childLevel);
+            $child->setIsFirst($counter == 1);
+            $child->setIsLast($counter == $childrenCount);
+            $child->setPositionClass($itemPositionClassPrefix . $counter);
+
+            $outermostClassCode = '';
+            $outermostClass = $menuTree->getOutermostClass();
+
+            if ($childLevel == 0 && $outermostClass) {
+                $outermostClassCode = ' class="' . $outermostClass . '" ';
+                $child->setClass($outermostClass);
+            }
+
+            $html .= '<li ' . $this->_getRenderedMenuItemAttributes($child) . '>';
+            $html .= '<a href="' . $child->getUrl() . '" ' . $outermostClassCode . '><span>'
+                . $this->escapeHtml($child->getName()) . '</span></a>';
+
+            if ($child->hasChildren()) {
+                if (!empty($childrenWrapClass)) {
+                    $html .= '<div class="' . $childrenWrapClass . '">';
+                }
+                $html .= '<ul class="level' . $childLevel . '">';
+                $html .= $this->_getHtml($child, $childrenWrapClass);
+                $html .= '</ul>';
+
+                if (!empty($childrenWrapClass)) {
+                    $html .= '</div>';
+                }
             }
             $html .= '</li>';
 
@@ -146,6 +217,7 @@ class JScriptz_MegaMenu2_Block_Html_Topmenu extends Mage_Core_Block_Template
         }
 
         return $html;
+        }
     }
 
    

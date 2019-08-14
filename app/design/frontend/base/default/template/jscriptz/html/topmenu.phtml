@@ -31,27 +31,42 @@
  * @see JScriptz_MegaMenu2_Block_Html_Topmenu extends Mage_Page_Block_Html_Topmenu
  */
 ?>
-<?php $z=0;$_menu = $this->getHtml('level-top') ?>
-<?php $_menuItem = $this->getMenuItem() ?>
+<?php 
+$z=0;
+$_menu = $this->getHtml('level-top');
+$_menuItem = $this->getMenuItem();
+$menuDisabled = $this->isMenuDisabled();
+$menuItemSettings = $this->getMenuItemSettings();
+$store = $this->helper('core')->getStoreId();
+
+ ?>
+
+<?php if($menuDisabled == true): ?>
+<div class="nav-container">
+    <ul id="nav">
+        <?php echo $_menu ?>
+    </ul>
+</div>
+<?php else: ?>
 <script>
 $.noConflict();
 jQuery( document ).ready(function( $ ) {
    jQuery('#mgmenu1').universalMegaMenu({
         menu_effect: 'hover_fade',
-        menu_speed_show: 300,
-        menu_speed_hide: 200,
-        menu_speed_delay: 200,
-        menu_click_outside: false,
+        menu_speed_show: 100,
+        menu_speed_hide: 100,
+        menu_speed_delay: 100,
+        menu_click_outside: true,
         menubar_trigger : false,
         menubar_hide : false,
         menu_responsive: true
     });
-    megaMenuContactForm(); 
+    
 });
 </script>
 
 <div class="mgmenu_container" id="mgmenu1"><!-- Begin Mega Menu Container -->
- 
+
         <ul class="mgmenu"><!-- Begin Mega Menu -->
             	
 	
@@ -59,74 +74,128 @@ jQuery( document ).ready(function( $ ) {
           <!-- Begin MegaMenu Items -->
           
           <?php if(!empty($_menuItem)): ?>
-          <?php foreach($_menuItem as $sort){
-          $sortArray[] = $sort;
-          }
-          usort ($sortArray, function($a, $b) {return strcmp($a['position'], $b['position']);});
-          ?>
-          
-          <?php foreach($sortArray as $item): ?>
-          
-	          <?php if($item['linktitle'] != 'ROOT' && $item['level'] == 1): ?>
-	          <?php if($item['linktitle'] == 'Products'): ?>
-	           <li style=""><span><i class="mini_icon ic_grid"></i>Products</span><!-- Begin Products Item -->
-                        
-                <div class="dropdown_2columns dropdown_container" style="display: none;"><!-- Begin Products Item Container -->
-                		
-                    <ul class="dropdown_flyout">
+          <?php foreach($menuItemSettings as $setting){
+				$storeSetting[] = $setting;
+		} 
+	  ?>
+          <?php function mySort($a,$b){
+	           	if ($a['position'] == $b['position']) {
+	    		return 0;
+	  		}
+	  		return ($a['position'] < $b['position']) ? -1 : 1;
+	  	}
+	        
+	        usort($_menuItem, "mySort");
 
-                    <?php if($_menu): ?>
-                    <li class="mgmenu_button" style="display: none;"><?php echo $item["linktitle"]; ?></li><!-- Button (Mobile Devices) -->
-                       <?php echo $_menu; ?>
-                    <?php endif ?>
-                    </ul>                       
+          	foreach($_menuItem as $item): ?>
+          	<?php foreach($storeSetting as $set): ?>
+	          <?php if($item['linktitle'] != 'ROOT' && $item['level'] == 1 && $set['menuitem_id'] == $item['entity_id'] && $item['status'] == 1): ?>
+                      
+	          <?php if($item['linktype'] == 1): ?>
+	           <li><span><?php echo $item['linktitle']; ?></span><!-- Begin Products Item -->  
+
                 
-                </div><!-- End Products Item Container -->
-
-          </li><!-- End Products Item -->
-	          
-	          <?php else: ?>
-		          <li class="mgmenu_button" style="display: none;"><?php echo $item["linktitle"]; ?></li><!-- Button (Mobile Devices) -->
-
-		          <!-- Begin Dropdown Link -->
-		          <li>
-		          
-		          <?php if(!empty($item["linkpath"])):?>
-		          
-		          	<?php echo "<a href='".$item["linkpath"]."'"; 
-		          	
-		          	if(!empty($item["linktarget"])){
-		          	echo "target='_".$item['linktarget']."'>".$item["linktitle"]."</a>";
-		          	}
-		          	else{
-		          	echo ">".$item["linktitle"]."</a>";
-		          	}
-		          	?>
-		          
-		          <?php else: ?>
-		          
-			  	<span><?php echo $item["linktitle"]; ?></span>
-		          
-		          <?php endif; ?>
-		          
-
-		          
-		          <?php if(!empty($item["menuhtml"])): ?>
-		          
-		          	<?php echo $item["menuhtml"]; ?>
-		          	
-		          <?php endif; ?>
-
-		          </li>
-		          <!-- End Dropdown Link -->
-
-		  <?php endif; ?>
+                <?php if($_menu): ?>
+                <div class="dropdown_2columns dropdown_container" style="display: none;"><!-- Begin Products Item Container -->		
+                    <ul class="dropdown_flyout">
+                       <?php echo $_menu; ?>
+                    </ul>
+                </div>                       
+                 <?php endif ?>
+                <!-- End Products Item Container -->
+                
+		</li>
+        	<!-- End Products Item -->
 	          <?php endif; ?>
-	          
-          <?php endforeach; ?>
-          <?php endif ?>
+	          <?php if($item['linktype'] == 0 || $item['linktype'] == 2): ?>
 
-            <li class="right_item" style=""><span><i class="mini_icon ic_chat"></i>Contact</span><!-- Begin Item -->
+			<?php if($item['linktype'] == 0): ?>
+		          	<?php
+				$target = ($item['linktarget']) ? 'blank' : 'self'; 
+		          	echo "<li><span><a href='".$item['linkpath']."' target='_".$target."' class='".$item["linkclass"]."' title ='".$item["titletag"]."' >".$item["linktitle"]."</a></span></li>";
+		          	?>
+		          <?php endif; ?>
+		          <?php if($item['linktype'] == 2): ?>
+		          
+			  	<?php echo "<li><span>".$item["linktitle"]."</span>"; ?>
+
+		          	<?php echo $item["menuhtml"]."</li>"; ?>
+		          	
+		          <?php endif; ?>
+		<?php endif; ?>      
+
+	        
+	        <?php if($item['linktype'] == 4 && $set['menuitem_id'] == $item['entity_id']): ?>
+	        
+	        <li style="" title="<?php echo $item['titletag']; ?>"><span><i class="mini_icon ic_grid"></i><?php echo $item['linktitle']; ?></span><!-- Begin Products Item -->
+                        
+                <div class='dropdown_fullwidth mgmenu_tabs' style='display: none;'><!-- Begin Item Container -->
+                
+
+<!--                    <ul class='mgmenu_tabs_nav'>
+
+                        <li><a class='current' href='#section1'>Popular Products</a></li>
+                        <li><a href='#section2'>Related Products</a></li>
+
+
+                    </ul>-->
+                    
+                   <!-- <div class='mgmenu_tabs_panels'> Begin Panels Container -->
+                    
+                         <div class='mgmenu_tabs' id='section1'><!-- Begin Section 1 -->
+
+                             <?php if(!empty($item['menuhtml'])): ?>
+                             <div class='featured'>
+                             <?php echo $item['menuhtml'];?>
+                             </div>
+                             <?php endif; ?>                 
+<?php 			$model = Mage::getModel('megamenu2/menuitem_product')->getProductCollection($item['entity_id']);
+                        if($model){
+                      		$ent = $model->getData();
+                      		
+				
+                     		foreach($ent as $ent2){
+	                       		$prod = Mage::getModel('catalog/product')->loadByAttribute('entity_id',$ent2['entity_id']);
+		                      if($prod){
+			                      foreach($prod as $p){
+			                      
+				                      if(!empty($p["name"]) && $p['name'] != 'e'){		                      
+					                      echo "<div class='col_3 featured'>
+				                                <a href='".$p["url_path"]."'><img width='220' height='140' class='inline_img' alt='' src='/media/catalog/product".$p['image']."'></a>";
+					                      echo nl2br("
+					                      <p class='img_description'>
+					                      	<a title='".$p["name"]."' href='".$p["url_path"]."'>".$p["name"]."</a>
+					                      </p>
+					                      <p class='featured_price'>
+					                      Price: $".sprintf('%01.2f', $p['price'])."
+					                      </p>
+					                      <br /></div>");
+				                      }
+			                      }
+		                      }
+				}
+                        	unset($model); 
+                        }
+?>
+                        
+                        </div><!-- End Section 2 -->
+                        
+                        
+                        
+                       
+                    
+                   <!-- </div> End Panels Container -->
+
+                                
+                </div><!-- End Item Container -->
+
+            
+            </li><!-- End Item -->
+	        
+	        <?php endif; ?>
+
+		<?php if($item['linktype'] == 3 && $set['menuitem_id'] == $item['entity_id']): ?>
+		 <li class="right_item" style=""><span><i class="mini_icon ic_chat"></i>Contact</span><!-- Begin Item -->
             
             
                 <div class="dropdown_container dropdown_4columns dropdown_right" style="display: none;"><!-- Begin Item Container -->
@@ -170,6 +239,13 @@ jQuery( document ).ready(function( $ ) {
 
             
             </li><!-- End Item -->
+             <?php endif; ?>
+             <?php endif; ?>
+	   <?php endforeach; ?>   
+          <?php endforeach; ?>
+          <?php endif ?>
+
+           
 
 
 
@@ -178,3 +254,4 @@ jQuery( document ).ready(function( $ ) {
 
 
     </div>
+<?php endif; ?>

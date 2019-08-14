@@ -10,15 +10,15 @@
  * http://opensource.org/licenses/mit-license.php
  * 
  * @category   	JScriptz
- * @package	JScriptz_MegaMenu2
+ * @package		JScriptz_MegaMenu2
  * @copyright  	Copyright (c) 2013
- * @license	http://opensource.org/licenses/mit-license.php MIT License
+ * @license		http://opensource.org/licenses/mit-license.php MIT License
  */
 /**
  * MegaMenu2 textarea attribute WYSIWYG button
  * @category   JScriptz
  * @package	JScriptz_MegaMenu2
-
+ * @author Jason Lotzer
  */
 class JScriptz_MegaMenu2_Block_Adminhtml_Helper_Wysiwyg extends Varien_Data_Form_Element_Textarea
 {
@@ -26,6 +26,7 @@ class JScriptz_MegaMenu2_Block_Adminhtml_Helper_Wysiwyg extends Varien_Data_Form
 	 * Retrieve additional html and put it at the end of element html
 	 * @access public
 	 * @return string
+	 * @author Jason Lotzer
 	 */
 	public function getAfterElementHtml(){
 		$html = parent::getAfterElementHtml();

@@ -10,22 +10,23 @@
  * http://opensource.org/licenses/mit-license.php
  * 
  * @category   	JScriptz
- * @package	JScriptz_MegaMenu2
+ * @package		JScriptz_MegaMenu2
  * @copyright  	Copyright (c) 2013
- * @license	http://opensource.org/licenses/mit-license.php MIT License
+ * @license		http://opensource.org/licenses/mit-license.php MIT License
  */
 /**
  * Menu Item admin controller
  *
  * @category	JScriptz
- * @package	JScriptz_MegaMenu2
-
+ * @package		JScriptz_MegaMenu2
+ * @author Jason Lotzer
  */
 class JScriptz_MegaMenu2_Adminhtml_MegaMenu2_MenuitemController extends JScriptz_MegaMenu2_Controller_Adminhtml_MegaMenu2{
 	/**
 	 * init menu item
 	 * @access protected
-	 * @return JScriptz_MegaMenu2_Model_Menuitem	
+	 * @return JScriptz_MegaMenu2_Model_Menuitem
+	 * @author Jason Lotzer
 	 */
 	protected function _initMenuitem(){
 		$menuitemId = (int) $this->getRequest()->getParam('id',false);
@@ -44,7 +45,7 @@ class JScriptz_MegaMenu2_Adminhtml_MegaMenu2_MenuitemController extends JScriptz
 	 * default action
 	 * @access public
 	 * @return void
-	
+	 * @author Jason Lotzer
 	 */
 	public function indexAction(){
 		$this->_forward('edit');
@@ -54,7 +55,7 @@ class JScriptz_MegaMenu2_Adminhtml_MegaMenu2_MenuitemController extends JScriptz
 	 * Add new menu item form
 	 * @access public
 	 * @return void
-	
+	 * @author Jason Lotzer
 	 */
 	public function addAction(){
 		Mage::getSingleton('admin/session')->unsActiveTabId();
@@ -64,7 +65,7 @@ class JScriptz_MegaMenu2_Adminhtml_MegaMenu2_MenuitemController extends JScriptz
 	 * Edit menu item page
 	 * @access public
 	 * @return void
-	
+	 * @author Jason Lotzer
 	 */
 	public function editAction(){
 		$params['_current'] = true;
@@ -131,7 +132,7 @@ class JScriptz_MegaMenu2_Adminhtml_MegaMenu2_MenuitemController extends JScriptz
 	 * Get tree node (Ajax version)
 	 * @access public
 	 * @return void
-	
+	 * @author Jason Lotzer
 	 */
 	public function menuitemsJsonAction(){
 		if ($this->getRequest()->getParam('expand_all')) {
@@ -178,7 +179,7 @@ class JScriptz_MegaMenu2_Adminhtml_MegaMenu2_MenuitemController extends JScriptz
 	 * Retrieve menu item tree
 	 * @access public
 	 * @return void
-	
+	 * @author Jason Lotzer
 	 */
 	public function treeAction(){
 		$menuitemId = (int) $this->getRequest()->getParam('id');
@@ -204,7 +205,7 @@ class JScriptz_MegaMenu2_Adminhtml_MegaMenu2_MenuitemController extends JScriptz
 	 * Build response for refresh input element 'path' in form
 	 * @access public
 	 * @return void
-	
+	 * @author Jason Lotzer
 	 */
 	public function refreshPathAction(){
 		if ($id = (int) $this->getRequest()->getParam('id')) {
@@ -221,7 +222,7 @@ class JScriptz_MegaMenu2_Adminhtml_MegaMenu2_MenuitemController extends JScriptz
 	 * Delete menu item action
 	 * @access public
 	 * @return void
-	
+	 * @author Jason Lotzer
 	 */
 	public function deleteAction(){
 		if ($id = (int) $this->getRequest()->getParam('id')) {
@@ -250,7 +251,7 @@ class JScriptz_MegaMenu2_Adminhtml_MegaMenu2_MenuitemController extends JScriptz
 	 * Check if admin has permissions to visit related pages
 	 * @access protected
 	 * @return boolean
-	
+	 * @author Jason Lotzer
 	 */
 	protected function _isAllowed(){
 		return Mage::getSingleton('admin/session')->isAllowed('megamenu2/menuitem');
@@ -258,7 +259,7 @@ class JScriptz_MegaMenu2_Adminhtml_MegaMenu2_MenuitemController extends JScriptz
 	 * wyisiwyg action
 	 * @access public
 	 * @return void
-	
+	 * @author Jason Lotzer
 	 */
 	public function wysiwygAction(){
 		$elementId = $this->getRequest()->getParam('element_id', md5(microtime()));
@@ -275,7 +276,7 @@ class JScriptz_MegaMenu2_Adminhtml_MegaMenu2_MenuitemController extends JScriptz
 	 * Menu Item save action
 	 * @access public
 	 * @return void
-	
+	 * @author Jason Lotzer
 	 */
 	public function saveAction(){
 		if (!$menuitem = $this->_initMenuitem()) {
@@ -284,6 +285,8 @@ class JScriptz_MegaMenu2_Adminhtml_MegaMenu2_MenuitemController extends JScriptz
 		$refreshTree = 'false';
 		if ($data = $this->getRequest()->getPost('menuitem')) {
 			$menuitem->addData($data);
+				$linkimageName = $this->_uploadAndGetName('linkimage', Mage::helper('megamenu2/menuitem')->getFileBaseDir(), $data);
+				$menuitem->setData('linkimage', $linkimageName);
 			if (!$menuitem->getId()) {
 				$parentId = $this->getRequest()->getParam('parent');
 				if (!$parentId) {
@@ -293,6 +296,27 @@ class JScriptz_MegaMenu2_Adminhtml_MegaMenu2_MenuitemController extends JScriptz
 				$menuitem->setPath($parentMenuitem->getPath());
 			}
 			try {
+				$products = $this->getRequest()->getPost('menuitem_products', -1);
+				if ($products != -1) {
+					$productData = array();
+					parse_str($products, $productData);
+					$products = array();
+					foreach ($productData as $id=>$position){
+						$products[$id]['position'] = $position;
+					}
+					$menuitem->setProductsData($productData);
+				}
+
+				$menusettings = $this->getRequest()->getPost('menuitem_menusettings', -1);
+				if ($menusettings != -1) {
+					$menusettingData = array();
+					parse_str($menusettings, $menusettingData);
+					$menusettings = array();
+					foreach ($menusettingData as $id=>$position){
+						$menusetting[$id]['position'] = $position;
+					}
+					$menuitem->setMenusettingsData($menusettingData);
+				}
 				$menuitem->save();
 				Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('megamenu2')->__('The menu item has been saved.'));
 				$refreshTree = 'true';
@@ -306,6 +330,28 @@ class JScriptz_MegaMenu2_Adminhtml_MegaMenu2_MenuitemController extends JScriptz
 		$url = $this->getUrl('*/*/edit', array('_current' => true, 'id' => $menuitem->getId()));
 		$this->getResponse()->setBody(
 			'<script type="text/javascript">parent.updateContent("' . $url . '", {}, '.$refreshTree.');</script>'
+		);
+	}
+	/**
+	 * get the products grid
+	 * @access public
+	 * @return void
+	 * @author Jason Lotzer
+	 */
+	public function productsgridAction(){
+		if (!$menuitem = $this->_initMenuitem()) {
+			return;
+		}
+		$this->getResponse()->setBody(
+			$this->getLayout()->createBlock('megamenu2/adminhtml_menuitem_edit_tab_product', 'menuitem.product.grid')->toHtml()
+		);
+	}
+	public function menusettingsgridAction(){
+		if (!$menuitem = $this->_initMenuitem()) {
+			return;
+		}
+		$this->getResponse()->setBody(
+			$this->getLayout()->createBlock('megamenu2/adminhtml_menuitem_edit_tab_menusetting', 'menuitem.menusetting.grid')->toHtml()
 		);
 	}
 }

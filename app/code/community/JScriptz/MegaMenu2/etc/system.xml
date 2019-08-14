@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * JScriptz_MegaMenu2 extension
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the MIT License
+ * that is bundled with this @@package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ * 
+ * @category   	JScriptz
+ * @@@package		JScriptz_MegaMenu2
+ * @copyright  	Copyright (c) 2013
+ * @license		http://opensource.org/licenses/mit-license.php MIT License
+ */
+-->
+<config>
+    <tabs>
+        <megamenu2config translate="label" module="megamenu2">
+            <label>MegaMenu2 Config</label>
+            <sort_order>9999</sort_order>
+        </megamenu2config>
+    </tabs> 
+<sections>
+        <megamenu2_options translate="label" module="megamenu2">
+            <label>MegaMenu2 Config Options</label>
+            <tab>megamenu2config</tab>
+            <frontend_type>select</frontend_type>
+            <sort_order>1000</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <options translate="label">
+                    <label>Is Enabled</label>
+                    <frontend_type>select</frontend_type>
+                    <sort_order>1</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>  
+                    <fields>
+				        <megamenu2>
+				            <label>Is Enabled</label>
+				            <frontend_type>select</frontend_type>
+				            <source_model>megamenu2/SystemSettings</source_model>
+				            <sort_order>1</sort_order>
+				            <show_in_default>1</show_in_default>
+				            <show_in_website>1</show_in_website>
+				            <show_in_store>1</show_in_store>                    
+				        </megamenu2>
+				    </fields>              
+                </options>
+            </groups>
+        </megamenu2_options>
+    </sections>     
+</config>

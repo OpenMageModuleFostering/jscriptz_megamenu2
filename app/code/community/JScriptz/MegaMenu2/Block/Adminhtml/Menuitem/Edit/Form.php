@@ -10,16 +10,16 @@
  * http://opensource.org/licenses/mit-license.php
  * 
  * @category   	JScriptz
- * @package	JScriptz_MegaMenu2
+ * @package		JScriptz_MegaMenu2
  * @copyright  	Copyright (c) 2013
- * @license	http://opensource.org/licenses/mit-license.php MIT License
+ * @license		http://opensource.org/licenses/mit-license.php MIT License
  */
 /**
  * Menu Item edit form
  *
  * @category	JScriptz
- * @package	JScriptz_MegaMenu2
-
+ * @package		JScriptz_MegaMenu2
+ * @author Jason Lotzer
  */
 class JScriptz_MegaMenu2_Block_Adminhtml_Menuitem_Edit_Form extends JScriptz_MegaMenu2_Block_Adminhtml_Menuitem_Abstract
 {
@@ -33,6 +33,7 @@ class JScriptz_MegaMenu2_Block_Adminhtml_Menuitem_Edit_Form extends JScriptz_Meg
 	 * set template
 	 * @access public
 	 * @return void
+	 * @author Jason Lotzer
 	 */
 	public function __construct(){
 		parent::__construct();
@@ -42,6 +43,7 @@ class JScriptz_MegaMenu2_Block_Adminhtml_Menuitem_Edit_Form extends JScriptz_Meg
 	 * prepare the layout
 	 * @access protected
 	 * @return JScriptz_MegaMenu2_Block_Adminhtml_Menuitem_Edit_Form
+	 * @author Jason Lotzer
 	 */
 	protected function _prepareLayout(){
 		$menuitem = $this->getMenuitem();
@@ -84,6 +86,7 @@ class JScriptz_MegaMenu2_Block_Adminhtml_Menuitem_Edit_Form extends JScriptz_Meg
 	 * get html for delete button
 	 * @access public
 	 * @return string
+	 * @author Jason Lotzer
 	 */
 	public function getDeleteButtonHtml(){
 		return $this->getChildHtml('delete_button');
@@ -92,6 +95,7 @@ class JScriptz_MegaMenu2_Block_Adminhtml_Menuitem_Edit_Form extends JScriptz_Meg
 	 * get html for save button
 	 * @access public
 	 * @return string
+	 * @author Jason Lotzer
 	 */
 	public function getSaveButtonHtml(){
 		return $this->getChildHtml('save_button');
@@ -100,6 +104,7 @@ class JScriptz_MegaMenu2_Block_Adminhtml_Menuitem_Edit_Form extends JScriptz_Meg
 	 * get html for reset button
 	 * @access public
 	 * @return string
+	 * @author Jason Lotzer
 	 */
 	public function getResetButtonHtml(){
 		return $this->getChildHtml('reset_button');
@@ -108,6 +113,7 @@ class JScriptz_MegaMenu2_Block_Adminhtml_Menuitem_Edit_Form extends JScriptz_Meg
 	 * Retrieve additional buttons html
 	 * @access public
 	 * @return string
+	 * @author Jason Lotzer
 	 */
 	public function getAdditionalButtonsHtml(){
 		$html = '';
@@ -123,6 +129,7 @@ class JScriptz_MegaMenu2_Block_Adminhtml_Menuitem_Edit_Form extends JScriptz_Meg
 	 * @param string $alias
 	 * @param array $config
 	 * @return JScriptz_MegaMenu2_Block_Adminhtml_Menuitem_Edit_Form
+	 * @author Jason Lotzer
 	 */
 	public function addAdditionalButton($alias, $config){
 		if (isset($config['name'])) {
@@ -138,6 +145,7 @@ class JScriptz_MegaMenu2_Block_Adminhtml_Menuitem_Edit_Form extends JScriptz_Meg
 	 * @access public
 	 * @param string $alias
 	 * @return JScriptz_MegaMenu2_Block_Adminhtml_Menuitem_Edit_Form
+	 * @author Jason Lotzer
 	 */
 	public function removeAdditionalButton($alias){
 		if (isset($this->_additionalButtons[$alias])) {
@@ -150,6 +158,7 @@ class JScriptz_MegaMenu2_Block_Adminhtml_Menuitem_Edit_Form extends JScriptz_Meg
 	 * get html for tabs
 	 * @access public
 	 * @return string
+	 * @author Jason Lotzer
 	 */
 	public function getTabsHtml(){
 		return $this->getChildHtml('tabs');
@@ -158,6 +167,7 @@ class JScriptz_MegaMenu2_Block_Adminhtml_Menuitem_Edit_Form extends JScriptz_Meg
 	 * get the form header
 	 * @access public
 	 * @return string
+	 * @author Jason Lotzer
 	 */
 	public function getHeader(){
 		if ($this->getMenuitemId()) {
@@ -172,6 +182,7 @@ class JScriptz_MegaMenu2_Block_Adminhtml_Menuitem_Edit_Form extends JScriptz_Meg
 	 * @access public
 	 * @param array $args
 	 * @return string
+	 * @author Jason Lotzer
 	 */
 	public function getDeleteUrl(array $args = array()){
 		$params = array('_current'=>true);
@@ -183,6 +194,7 @@ class JScriptz_MegaMenu2_Block_Adminhtml_Menuitem_Edit_Form extends JScriptz_Meg
 	 * @access public
 	 * @param array $args
 	 * @return string
+	 * @author Jason Lotzer
 	 */
 	public function getRefreshPathUrl(array $args = array()){
 		$params = array('_current'=>true);
@@ -193,8 +205,43 @@ class JScriptz_MegaMenu2_Block_Adminhtml_Menuitem_Edit_Form extends JScriptz_Meg
 	 * check if request is ajax
 	 * @access public
 	 * @return bool
+	 * @author Jason Lotzer
 	 */
 	public function isAjax(){
 		return Mage::app()->getRequest()->isXmlHttpRequest() || Mage::app()->getRequest()->getParam('isAjax');
+	}
+	/**
+	 * get products json
+	 * @access public
+	 * @return string
+	 * @author Jason Lotzer
+	 */
+	public function getProductsJson(){
+		$products = $this->getMenuitem()->getSelectedProducts();
+		if (!empty($products)) {
+			$positions = array();
+				foreach ($products as $product){
+					$positions[$product->getId()] = $product->getPosition();
+				}
+			return Mage::helper('core')->jsonEncode($positions);
+		}
+		return '{}';
+	}
+	/**
+	 * get menu settings in json format
+	 * @access public
+	 * @return string
+	 * @author Jason Lotzer
+	 */
+	public function getMenusettingsJson(){
+		$menusettings = $this->getMenuitem()->getSelectedMenusettings();
+		if (!empty($menusettings)) {
+			$positions = array();
+			foreach ($menusettings as $menusetting){
+				$positions[$menusetting->getId()] = $menusetting->getPosition();
+			}
+			return Mage::helper('core')->jsonEncode($positions);
+		}
+		return '{}';
 	}
 }
